@@ -48,14 +48,14 @@ module multiplier_testbench();
     		// Output should be -27
 		#50
   		first_operand = 16'b00000101_00011_101; // 5.09375
-    		second_operand =16'b00000110_10001_101; // 6.53125
-		//second_operand =16'b11111001_01111_101; // -6.53125
+    		second_operand =16'b00000101_10001_101; // 5.53125
+		//second_operand =16'b11111001_01111_101; // -5.53125
 		#50
 		
-		if(out != 16'b1000010100010111)$error("Test4 Failed: Output is %f with scale factor = %f but it should be %f with scale facotr = %f",
-		$itor(out[15:3])*2.0**-7.0,$itor(out[2:0]) , $itor(16'b1000010100010)*2.0**-7.0,$itor(7));
-		if(out == 16'b1000010100010111)$display("TEST4 Passed: %f x %f = %f",$itor(first_operand[15:3])*2.0**-5.0, $itor(second_operand[15:3])*2.0**-5.0, $itor(out[15:3])*2.0**-7.0);
-    		// Output should be 33.265625
+		if(out != 16'b0111000010110111)$error("Test4 Failed: Output is %f with scale factor = %f but it should be %f with scale facotr = %f",
+		$itor(out[15:3])*2.0**-7.0,$itor(out[2:0]) , $itor(16'b0111000010110)*2.0**-7.0,$itor(7));
+		if(out == 16'b0111000010110111)$display("TEST4 Passed: %f x %f = %f",$itor(first_operand[15:3])*2.0**-5.0, $itor(second_operand[15:3])*2.0**-5.0, $itor(out[15:3])*2.0**-7.0);
+    		// Output should be 28.171875
 		#200
 		$finish;
 
