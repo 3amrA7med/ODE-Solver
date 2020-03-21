@@ -8,10 +8,15 @@ def multiplier(first_operand, second_operand):
 
     # Extract scale factor and obtain numbers
     sf_1 = input_1 & 0x0007  # Scale factor of first operand
-    num_1 = np.uint32(input_1 >> 3)  # Number of first operand
-
+    num_1 = np.uint16(input_1 >> 3)  # Number of first operand
+    if input_1 >> 15:
+        num_1 = num_1 | 0xFFFFE000   # sign extend
+        print(bin(num_1))
     sf_2 = input_2 & 0x0007  # Scale factor of second operand
-    num_2 = np.uint32(input_2 >> 3)  # Number of second operand
+    num_2 = np.uint16(input_2 >> 3)  # Number of second operand
+    if input_2 >> 15:
+        num_2 = num_2 | 0xFFFFE000  # sign extend
+
     # Calculate sum of scale factors and multiply the 2 numbers
     sum_scale_factor = sf_1 + sf_2
     output_number = np.uint32(num_1 * num_2)

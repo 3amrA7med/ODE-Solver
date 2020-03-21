@@ -55,6 +55,18 @@ module multiplier_testbench();
 		$itor(out[15:3])*2.0**-7.0,$itor(out[2:0]) , $itor(16'b0111000010110)*2.0**-7.0,$itor(7));
 		if(out == 16'b0111000010110111)$display("TEST4 Passed: %f x %f = %f",$itor(first_operand[15:3])*2.0**-5.0, $itor(second_operand[15:3])*2.0**-5.0, $itor(out[15:3])*2.0**-7.0);
     		// Output should be 28.171875
+		#50
+    		first_operand = 16'b000111_1000000_111; // 7.5
+    		second_operand = 16'b111111_0000000_111; // -1.0
+		
+		#50
+		temp = second_operand[15:3];
+		temp2 = out[15:3];
+		temp3 = 16'b1110001000000;
+		if(out != 16'b1110001000000111) $error("Test5 Failed: Output is %f with scale factor = %f but it should be %f with scale facotr = %f",
+		$itor(temp2)*2.0**-7.0 ,$itor(out[2:0]), $itor(temp3)*2.0**-7.0,$itor(2));
+		if(out == 16'b1110001000000111)$display("TEST5 Passed: %f x %f = %f",$itor(first_operand[15:3])*2.0**-7.0, $itor(temp)*2.0**-7.0, $itor(temp2)*2.0**-7.0);
+    		// Output should be -27
 		#200
 		$finish;
 
