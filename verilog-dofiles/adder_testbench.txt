@@ -1,15 +1,4 @@
 vsim -gui work.adder_testbench
-# vsim -gui work.adder_testbench 
-# Start time: 11:29:18 on Mar 21,2020
-# Loading work.adder_testbench
-# Loading work.adder
-run
-# TEST1 Passed : 3.500000 + 5.250000 = 8.750000
-run
-# TEST2 Passed : -6.500000 + 4.000000 = -2.500000
-run
-# TEST3 Passed: 6.750000 + -4.000000 = 2.750000
-run
-# TEST4 Passed: 5.093750 + 5.531250 = 10.625000
-run
+add wave sim:/adder_testbench/*
+run 400ps
 

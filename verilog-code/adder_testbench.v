@@ -3,7 +3,7 @@ module adder_testbench();
 	reg signed [15:0] first_operand, second_operand;
 	reg signed [12:0] temp,temp2,temp3; // used in display
   	wire signed [15:0] out;
- 	localparam sf = 0 ,sf2 = 0;  // Q12.4 scaling factor is 2^-4
+ 	
   	adder DUT(
     		.in1(first_operand),
     		.in2(second_operand),

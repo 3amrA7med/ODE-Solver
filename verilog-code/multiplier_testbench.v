@@ -3,7 +3,7 @@ module multiplier_testbench();
 	reg signed [15:0] first_operand, second_operand;
 	reg signed [12:0] temp,temp2,temp3; // used in display
   	wire signed [15:0] out;
- 	localparam sf = 0 ,sf2 = 0;  // Q12.4 scaling factor is 2^-4
+ 	
   	multiplier DUT(
     		.first_operand(first_operand),
     		.second_operand(second_operand),
@@ -49,7 +49,6 @@ module multiplier_testbench();
 		#50
   		first_operand = 16'b00000101_00011_101; // 5.09375
     		second_operand =16'b00000101_10001_101; // 5.53125
-		//second_operand =16'b11111001_01111_101; // -5.53125
 		#50
 		
 		if(out != 16'b0111000010110111)$error("Test4 Failed: Output is %f with scale factor = %f but it should be %f with scale facotr = %f",
