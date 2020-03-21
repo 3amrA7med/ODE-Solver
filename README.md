@@ -19,7 +19,7 @@ pip install numpy
 pip install click
 ```
 ### Run
-To run the program in the command line navigate to the python-code folder and write --help to see the options.
+To run the program in the command line navigate to the python-code folder and write help to see the options.
 ```python
 python run.py --help 
 ```
