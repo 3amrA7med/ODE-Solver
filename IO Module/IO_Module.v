@@ -17,7 +17,7 @@ module IO_Module #(parameter ADDRESS_WIDTH = 13,
                    output reg [ADDRESS_WIDTH - 1 :0] RAM_Address_WR);
     
     wire Loading_Enable = (INT && Load_Process) || Loading_Enable;
-    wire Sending_Enable = (INT && ~Load_Process) || Sending_Enable;
+    wire Sending_Enable;
     wire [ADDRESS_WIDTH - 1 :0] Decoder_Memory_Address_WR;
     wire [ADDRESS_WIDTH - 1 :0] Sender_Memory_Address_RD_A;
     wire [ADDRESS_WIDTH - 1 :0] Sender_Memory_Address_RD_B;

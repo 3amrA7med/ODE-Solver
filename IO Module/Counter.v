@@ -29,7 +29,7 @@ module Counter #(parameter VALUE_WIDTH = 8,
                 else begin
                     value = value - 1; //Decrement counter
                 end  
-            end   
+            end
         end
     end
 endmodule
