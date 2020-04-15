@@ -1,4 +1,3 @@
-
 module DFlipFlop(input D,
                  input CLK,
                  input RST,
