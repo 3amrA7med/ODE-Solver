@@ -25,14 +25,8 @@ module RAM #(parameter ADDRESS_WIDTH = 13,
         end
         
     end
-
-    always @(negedge CLK) begin
-	if (~RST) begin
-            dataOut1 = Memory[address_RD1];
-            dataOut2 = Memory[address_RD2];
-        end
-    end
-    
-    
+    assign dataOut1 = Memory[address_RD1];
+    assign dataOut2 = Memory[address_RD2];
+   
 endmodule
     
