@@ -18,8 +18,6 @@ module RAM #(parameter ADDRESS_WIDTH = 13,
             if (WR_Enable) begin
                 Memory[address_WR] = dataIn;
             end
-            //dataOut1 = Memory[address_RD1];
-            //dataOut2 = Memory[address_RD2];
         end
         else begin
             for (i = 0 ;i < DEPTH; i = i + 1)
@@ -29,8 +27,6 @@ module RAM #(parameter ADDRESS_WIDTH = 13,
     end
     assign dataOut1 = Memory[address_RD1];
     assign dataOut2 = Memory[address_RD2];
-    
-    
-    
+   
 endmodule
     
