@@ -3,6 +3,7 @@ verilog-code/work
 verilog-code/transcript
 IO Module/work
 IO Module/transcript
+IO Module/output.txt
 python-code/venv/
 
 # Verilog extensions
