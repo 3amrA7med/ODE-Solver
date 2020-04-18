@@ -1,35 +1,21 @@
-
-module Counter #(parameter VALUE_WIDTH = 8,
-                parameter RESET_VALUE_WIDTH = 8)
-                (output reg [VALUE_WIDTH - 1 :0] value,
-                 input Enable,
-                 input CLK,
-                 input RST,
-		 input [RESET_VALUE_WIDTH - 1 :0] Start_Reset_Value,
-                 input UP_DOWN);
-    
-    
-    always @(posedge(CLK))
-    begin
-        if (RST == 1)
-            value = 0;
-        else begin
-            if (UP_DOWN == 1 && Enable == 1)  begin
-                if (value == Start_Reset_Value) begin
-                    value = 0;
-                end
-                else begin
-                    value = value + 1; //Incremend Counter
-                end
-            end 
-            else if (UP_DOWN == 0 && Enable == 1) begin
-                if (value == 0) begin
-                    value = Start_Reset_Value;
-                end
-                else begin
-                    value = value - 1; //Decrement counter
-                end  
-            end
-        end
-    end
+module Counter #(parameter VALUE_WIDTH = 8)
+               (output [VALUE_WIDTH - 1 :0] value,
+		input Enable,
+                input CLK,
+                input RST);
+	
+	genvar i;
+	// Inputs wire "i" are the input to T flip flop number i
+	wire [VALUE_WIDTH - 1 :0]inputs;
+	// First T flip flop connected directly to the enable 
+	TFlipFlop  firstBit (Enable, CLK, RST, Enable, value[0]);  
+	assign inputs[0] = Enable; 
+	// Generate T flip flops equivalent to the value width - 1
+	generate
+		for(i=1; i<VALUE_WIDTH; i=i+1) begin 
+			// Input of the T flip flop is the anding between the previous input and the previous output
+			and andInputs(inputs[i],inputs[i-1],value[i-1]);
+			TFlipFlop  counterBits (inputs[i], CLK, RST, Enable, value[i]);
+		end
+	endgenerate
 endmodule

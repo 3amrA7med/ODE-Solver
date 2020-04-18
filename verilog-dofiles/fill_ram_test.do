@@ -6,11 +6,11 @@ force -freeze sim:/ODE_Solver_Chip/Memory/RST 0
 run  
 force -freeze sim:/ODE_Solver_Chip/Memory/WR_Enable 1 0
 force -freeze sim:/ODE_Solver_Chip/Memory/address_WR 0000000000001 0
-force -freeze sim:/ODE_Solver_Chip/Memory/dataIn 10#3 0
+force -freeze sim:/ODE_Solver_Chip/Memory/dataIn 10#2 0
 run
 force -freeze sim:/ODE_Solver_Chip/Memory/WR_Enable 1 0
 force -freeze sim:/ODE_Solver_Chip/Memory/address_WR 0000000000010 0
-force -freeze sim:/ODE_Solver_Chip/Memory/dataIn 10#2 0
+force -freeze sim:/ODE_Solver_Chip/Memory/dataIn 10#3 0
 run
 force -freeze sim:/ODE_Solver_Chip/Memory/WR_Enable 1 0
 force -freeze sim:/ODE_Solver_Chip/Memory/address_WR 0000000000011 0
