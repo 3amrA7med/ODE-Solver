@@ -69,14 +69,15 @@ module Decoder_Receiver #(parameter ADDRESS_WIDTH = 13,
 	Relative_Address = X0_STARTING_ADDRESS;
 	Small_Packet_Indication_Bit_Location = 0;
     end
-
-
-    integer i = 0;
-    always @(posedge CLK) begin
+   always @(posedge CLK) begin
 	//  Delay Loading Enable for One Clock Cycle
 	if(Loading_Enable == 1) begin
 	     Real_Loading_Enable = 1;
 	end
+    end
+
+    integer i = 0;
+    always @(posedge CLK) begin
 
         Start_Bit = (InitCount == 2);
 //--------------------------------- The Main Procedure --------------------------------------------------------//

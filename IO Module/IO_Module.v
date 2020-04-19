@@ -26,7 +26,7 @@ module IO_Module #(parameter ADDRESS_WIDTH = 13,
     
     
     Decoder_Receiver #(ADDRESS_WIDTH , DATA_WIDTH) DR
-    (RST, CLK, Loading_Enable, CPU_Bus, Done_Loading, Done_Processing_Current_Packet,
+    (RST, CLK, CPU_Bus, Loading_Enable, Done_Loading, Done_Processing_Current_Packet,
     Decoder_Memory_WR_Enable, Decoder_Memory_Address_WR, Decoder_Memory_Data_WR);
     
     Results_Sender #(ADDRESS_WIDTH ,DATA_WIDTH) RS
