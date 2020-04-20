@@ -9,8 +9,8 @@ module carry_select_adder_20bit(sub, in0, in1, cin, sum, cout, v);
  
 	wire [8:0] c;
 	
-	reg [19:0] tempin1;
-	reg tempcin;
+	wire [19:0] tempin1;
+	wire tempcin;
 	
 	assign tempcin = cin | sub;
 	assign tempin1 = (sub)? in1 ^ 20'b11111111111111111111 : in1;
