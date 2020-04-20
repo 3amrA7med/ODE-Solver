@@ -164,16 +164,16 @@ parameter   Start=3'b000,
             end
 
             Init: begin
-                A_ADD=1;
-                B_ADD=2;
-                n_ADD=3;
-                m_ADD=4;
-                h_ADD=5;
-                X_ADD=6;
-                XNew_ADD=7;
-                U_ADD=8;
-                RES1_ADD=11;
-                RES2_ADD=12;
+                n_ADD=0;
+                m_ADD=1;
+                h_ADD=4;
+                A_ADD=7;
+                B_ADD=2507;
+                X_ADD=5207;
+                U_ADD=5257;
+                RES1_ADD=5307;
+                RES2_ADD=5357;
+                XNew_ADD=5407;
                 Back=1;
                 
             end
