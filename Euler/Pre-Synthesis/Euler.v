@@ -15,20 +15,20 @@ parameter   Start=3'b000,
             Load2=3'b101,
             Final_Calc=3'b110;
 
-    reg [3:0] state,next;
-    reg [ADDRESS_WIDTH-1:0] A_ADD,B_ADD,X_ADD,U_ADD,h_ADD,XNew_ADD,n_ADD,m_ADD;
-    reg [ADDRESS_WIDTH-1:0] RES1_ADD,RES2_ADD;
-    reg [ADDRESS_WIDTH-1:0] RAM_ADD_RD1,RAM_ADD_RD2,RAM_ADD_WR;
+    reg  [2:0] state,next;
+    reg  [ADDRESS_WIDTH-1:0] A_ADD,B_ADD,X_ADD,U_ADD,h_ADD,XNew_ADD,n_ADD,m_ADD;
+    reg  [ADDRESS_WIDTH-1:0] RES1_ADD,RES2_ADD;
+    reg  [ADDRESS_WIDTH-1:0] RAM_ADD_RD1,RAM_ADD_RD2,RAM_ADD_WR;
     wire [DATA_WIDTH-1:0] RAM_DATA_RD1,RAM_DATA_RD2;
-    reg [DATA_WIDTH-1:0] RAM_DATA_WR;
-    reg RAM_ENABLE_WR;
+    reg  [DATA_WIDTH-1:0] RAM_DATA_WR;
+    reg  RAM_ENABLE_WR;
 
-    reg Back, cnt, Interpolate_Enable, Matrix_Multiplication1_Enable, Matrix_Multiplication2_Enable, Final_Calc_Enable;
-    reg [DATA_WIDTH-1:0] n_val, m_val, h_val;
-    reg [CUR_DATA_WIDTH-1:0] MATRIX_CNT,VECTOR_CNT,MATRIX_ADD,VECTOR_ADD,VECTOR2_ADD,Element_Result,RESULT_ADD;
+    reg  Back, Interpolate_Enable, Matrix_Multiplication1_Enable, Matrix_Multiplication2_Enable, Final_Calc_Enable;
+    reg  [DATA_WIDTH-1:0] n_val, m_val, h_val;
+    reg  [CUR_DATA_WIDTH-1:0] MATRIX_CNT,VECTOR_CNT,MATRIX_ADD,VECTOR_ADD,VECTOR2_ADD,Element_Result,RESULT_ADD;
     wire [CUR_DATA_WIDTH-1:0] NEW_Element_Result,NEW_MATRIX_CNT,NEW_VECTOR_CNT,NEW_MATRIX_ADD,NEW_VECTOR_ADD,NEW_VECTOR2_ADD,NEW_RESULT_ADD,Addition_Result,FINAL_RESULT;
     wire [CUR_DATA_WIDTH-2:0] Multiplication_Result,h_VECTOR_RESULT;
-    reg [1:0] counter;
+    reg  [1:0] counter;
     wire invalid[8:0], overflow[1:0], Interpolate_DONE;
 
     initial begin
@@ -59,7 +59,6 @@ parameter   Start=3'b000,
         counter=0;
         RES1_ADD=0;
         RES2_ADD=0;
-        cnt=0;
         VECTOR2_ADD=0;
         RESULT_ADD=0;
         RAM_DATA_WR=0;
@@ -181,12 +180,12 @@ parameter   Start=3'b000,
 
             Prepare: begin
                 Back=1;
-                cnt=1;
+                counter=1;
             end
 
             Interpolate:    begin
                 Interpolate_Enable=1;
-                if(cnt) begin
+                if(counter) begin
                     n_val=RAM_DATA_RD1;
                     m_val=RAM_DATA_RD2;
                 end
@@ -272,7 +271,7 @@ parameter   Start=3'b000,
                             Matrix_Multiplication1_Enable=1;
                         end
                         RAM_ADD_RD1=h_ADD;
-                        cnt=0;
+                        counter=0;
                     end
                     
                     Load1:  begin
@@ -302,12 +301,13 @@ parameter   Start=3'b000,
     RAM #(13,64,100) Memory(CLK,1'b0,RAM_ENABLE_WR,RAM_ADD_RD1,RAM_ADD_RD2,RAM_ADD_WR,
     RAM_DATA_RD1,RAM_DATA_RD2,RAM_DATA_WR);
 
-    multiplier_16bit MUL(RAM_DATA_RD1[15:0],RAM_DATA_RD2[15:0],Multiplication_Result[CUR_DATA_WIDTH-2:0],1'b1,overflow[0]);
-    // assign Multiplication_Result[CUR_DATA_WIDTH-2:0]=RAM_DATA_RD1[15:0]*RAM_DATA_RD2[15:0];
     
-    add_sub_cla ELEMENT_adder(1'b0,Element_Result[CUR_DATA_WIDTH-2:0],Multiplication_Result[CUR_DATA_WIDTH-2:0],1'b0,NEW_Element_Result[CUR_DATA_WIDTH-2:0],NEW_Element_Result[CUR_DATA_WIDTH-1],invalid[0]);
-    // assign NEW_Element_Result[CUR_DATA_WIDTH-1:0] = {1'b0,Element_Result[CUR_DATA_WIDTH-2:0]} + {1'b0,Multiplication_Result[CUR_DATA_WIDTH-2:0]};
+/**/
+//Our Arithmetic
 
+    multiplier_16bit MUL(RAM_DATA_RD1[15:0],RAM_DATA_RD2[15:0],Multiplication_Result[CUR_DATA_WIDTH-2:0],1'b1,overflow[0]);
+    add_sub_cla ELEMENT_adder(1'b0,Element_Result[CUR_DATA_WIDTH-2:0],Multiplication_Result[CUR_DATA_WIDTH-2:0],1'b0,NEW_Element_Result[CUR_DATA_WIDTH-2:0],NEW_Element_Result[CUR_DATA_WIDTH-1],invalid[0]);
+    
 
     add_sub_cla VECTOR_ADD_adder(1'b0,VECTOR_ADD[CUR_DATA_WIDTH-2:0],{16{1'b0}},1'b1,NEW_VECTOR_ADD[CUR_DATA_WIDTH-2:0],NEW_VECTOR_ADD[CUR_DATA_WIDTH-1],invalid[1]);
     add_sub_cla MATRIX_ADD_adder(1'b0,MATRIX_ADD[CUR_DATA_WIDTH-2:0],{16{1'b0}},1'b1,NEW_MATRIX_ADD[CUR_DATA_WIDTH-2:0],NEW_MATRIX_ADD[CUR_DATA_WIDTH-1],invalid[2]);
@@ -316,20 +316,38 @@ parameter   Start=3'b000,
     add_sub_cla RESULT_ADD_adder(1'b0,RESULT_ADD[CUR_DATA_WIDTH-2:0],{16{1'b0}},1'b1,NEW_RESULT_ADD[CUR_DATA_WIDTH-2:0],NEW_RESULT_ADD[CUR_DATA_WIDTH-1],invalid[5]);
     add_sub_cla VECTOR2_ADD_adder(1'b0,VECTOR2_ADD[CUR_DATA_WIDTH-2:0],{16{1'b0}},1'b1,NEW_VECTOR2_ADD[CUR_DATA_WIDTH-2:0],NEW_VECTOR2_ADD[CUR_DATA_WIDTH-1],invalid[6]);
 
-    // assign NEW_VECTOR_ADD[CUR_DATA_WIDTH-1:0]={1'b0,VECTOR_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-    // assign NEW_MATRIX_ADD[CUR_DATA_WIDTH-1:0]={1'b0,MATRIX_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-    // assign NEW_VECTOR_CNT[CUR_DATA_WIDTH-1:0]={1'b0,VECTOR_CNT[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-    // assign NEW_MATRIX_CNT[CUR_DATA_WIDTH-1:0]={1'b0,MATRIX_CNT[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-    // assign NEW_RESULT_ADD[CUR_DATA_WIDTH-1:0]={1'b0,RESULT_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-    // assign NEW_VECTOR2_ADD[CUR_DATA_WIDTH-1:0]={1'b0,VECTOR2_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
 
     add_sub_cla VEC1_VEC2_adder(1'b0,RAM_DATA_RD1[CUR_DATA_WIDTH-2:0],RAM_DATA_RD2[CUR_DATA_WIDTH-2:0],1'b0,Addition_Result[CUR_DATA_WIDTH-2:0],Addition_Result[CUR_DATA_WIDTH-1],invalid[7]);
-    // assign Addition_Result[CUR_DATA_WIDTH-1:0] = {1'b0,RAM_DATA_RD1[CUR_DATA_WIDTH-2:0]} + {1'b0,RAM_DATA_RD2[CUR_DATA_WIDTH-2:0]};
 
     multiplier_16bit h_MUL(Addition_Result[CUR_DATA_WIDTH-2:0],h_val[CUR_DATA_WIDTH-2:0],h_VECTOR_RESULT[CUR_DATA_WIDTH-2:0],1'b1,overflow[1]);
-    // assign h_VECTOR_RESULT[CUR_DATA_WIDTH-2:0]=Addition_Result[CUR_DATA_WIDTH-2:0]*h_val[CUR_DATA_WIDTH-2:0];
 
     add_sub_cla FINAL_RESULT_adder(1'b0,h_VECTOR_RESULT[CUR_DATA_WIDTH-2:0],Element_Result[CUR_DATA_WIDTH-2:0],1'b0,FINAL_RESULT[CUR_DATA_WIDTH-2:0],FINAL_RESULT[CUR_DATA_WIDTH-1],invalid[8]);
-    // assign FINAL_RESULT[CUR_DATA_WIDTH-1:0]={1'b0,h_VECTOR_RESULT[CUR_DATA_WIDTH-2:0]} + {1'b0,Element_Result[CUR_DATA_WIDTH-2:0]};
 
+    
+
+
+
+
+/*/
+//Built-in Arithmetic
+
+    assign Multiplication_Result[CUR_DATA_WIDTH-2:0]=RAM_DATA_RD1[15:0]*RAM_DATA_RD2[15:0];
+
+    assign NEW_Element_Result[CUR_DATA_WIDTH-1:0] = {1'b0,Element_Result[CUR_DATA_WIDTH-2:0]} + {1'b0,Multiplication_Result[CUR_DATA_WIDTH-2:0]};
+
+
+
+    assign NEW_VECTOR_ADD[CUR_DATA_WIDTH-1:0]={1'b0,VECTOR_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
+    assign NEW_MATRIX_ADD[CUR_DATA_WIDTH-1:0]={1'b0,MATRIX_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
+    assign NEW_VECTOR_CNT[CUR_DATA_WIDTH-1:0]={1'b0,VECTOR_CNT[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
+    assign NEW_MATRIX_CNT[CUR_DATA_WIDTH-1:0]={1'b0,MATRIX_CNT[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
+    assign NEW_RESULT_ADD[CUR_DATA_WIDTH-1:0]={1'b0,RESULT_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
+    assign NEW_VECTOR2_ADD[CUR_DATA_WIDTH-1:0]={1'b0,VECTOR2_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
+
+    assign Addition_Result[CUR_DATA_WIDTH-1:0] = {1'b0,RAM_DATA_RD1[CUR_DATA_WIDTH-2:0]} + {1'b0,RAM_DATA_RD2[CUR_DATA_WIDTH-2:0]};
+
+    assign h_VECTOR_RESULT[CUR_DATA_WIDTH-2:0]=Addition_Result[CUR_DATA_WIDTH-2:0]*h_val[CUR_DATA_WIDTH-2:0];
+
+    assign FINAL_RESULT[CUR_DATA_WIDTH-1:0]={1'b0,h_VECTOR_RESULT[CUR_DATA_WIDTH-2:0]} + {1'b0,Element_Result[CUR_DATA_WIDTH-2:0]};
+/**/
 endmodule

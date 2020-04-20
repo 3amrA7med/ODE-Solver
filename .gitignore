@@ -3,6 +3,8 @@ verilog-code/work
 verilog-code/transcript
 IO Module/work
 IO Module/transcript
+Euler/Pre-Synthesis/work
+Euler/Pre-Synthesis/transcript
 python-code/binary.txt
 results.txt
 python-code/venv/
@@ -14,7 +16,10 @@ python-code/venv/
 *.cr.mti
 *.mpf
 *.v.bak
-*.
+*.qdb
+*.qpg
+*.qtl
+
 
 # Python 
 __pycache__/
