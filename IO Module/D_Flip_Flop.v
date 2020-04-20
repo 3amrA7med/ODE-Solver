@@ -6,9 +6,9 @@ module DFlipFlop(input D,
     
     always @(posedge CLK)
     begin
-        if (RST == 1'b1)
+        if (RST)
             Q <= 1'b0;
-        else if (Enable == 1)
+        else if (Enable)
             Q <= D;
     end
 endmodule

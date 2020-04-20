@@ -1,7 +1,9 @@
 module Interpolation_Ram(input RST,
                         input CLK,
 			input Interpolation_Enable,
-      input Interpolation_Intialize);
+      input Interpolation_Intialize,
+      output Interpolation_Done,
+      output Intialization_Done);
 
 
     parameter RAM_ADDRESS_WIDTH                       = 13;
@@ -15,8 +17,6 @@ module Interpolation_Ram(input RST,
     wire [RAM_ADDRESS_WIDTH - 1 :0] Interpolation_RAM_RD2_Address;
     wire [DATA_WIDTH - 1 :0] Interpolation_RAM_RD2_Data;
     wire Interpolation_Memory_WR_Enable;
-    wire Interpolation_Done;
-    wire Intialization_Done;
 
     Interpolation #(RAM_ADDRESS_WIDTH, DATA_WIDTH) inter
     (RST, CLK, Interpolation_Enable, Interpolation_Intialize, Interpolation_Memory_WR_Enable, Interpolation_RAM_RD1_Data, Interpolation_RAM_RD2_Data,
