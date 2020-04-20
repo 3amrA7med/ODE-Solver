@@ -22,9 +22,10 @@ module Results_Sender #(parameter ADDRESS_WIDTH = 13,
 	
 	// Counter enables
     	reg Start_Bit, T_Count_Enable, _64data_Enable, X_Count_Enable, T_OR_X_Enable, Init_Count_Enable;
+	reg _64data = DATA_WIDTH == 64;
 
 	// Reg values used to keep size of T and X
-    	reg [DATA_WIDTH :0] num_of_T, num_of_X;
+    	reg [DATA_WIDTH - 1 :0] num_of_T, num_of_X;
     
     	reg [ADDRESS_WIDTH :0] RAM_Addr_B, RAM_Addr_A;
     	
@@ -70,7 +71,7 @@ module Results_Sender #(parameter ADDRESS_WIDTH = 13,
 
 		// This enable is for T_OR_X_Counter as it determines whether the data being sent
 		// in the moment is of type T or its X's
-		T_OR_X_Enable = (Start_Bit && ((T_OR_X == 2'b00) ||(X_Count == num_of_X - 1) )&&(Partial_Data_Count != 1)) || ((Init_Count == 1)&&_64data_Enable);
+		T_OR_X_Enable =  ( Start_Bit && ( (T_OR_X == 2'b00)||(X_Count == num_of_X - 1) )&&(Partial_Data_Count != 1)) || ((Init_Count == 1)&&_64data_Enable) ;
 
 
 		// This is T counter enable which is enabled if the module has started and we are sending the last 
