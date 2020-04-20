@@ -136,22 +136,24 @@ module Decoder_Receiver #(parameter ADDRESS_WIDTH = 13,
             end
 //---------------------------------------------------------------------------------------------------------
 	    // If Data_Size >= DATA_WIDTH => Operation 2 => Write Elements in Memory
+	    // If Data_Size < DATA_WIDTH => Operation 1 => Process another Packet
+	    Writing_Size = (Data_Size < DATA_WIDTH) ? Data_Size - (DATA_WIDTH - 1 - Writing_Start_Index) : Writing_Size;
+	    Writing_Last_Index = (Data_Size < DATA_WIDTH) ? Writing_Start_Index - Writing_Size + 1 : 0;
+	    // Complete The Decoded Data based on Writing Start Index and Writing Last Index
+            for (i = DATA_WIDTH - 1; i >= 0; i = i - 1) begin
+		if (i <= Writing_Start_Index && i >= Writing_Last_Index) begin
+                    Decoded_Data[i] = Data_Bit;
+		end
+            end
+	    // The Writing Start Index will Return to the First Bit in The Decoded Data if Data_Size was >= 64
+	    // But if Data Size < 64 It'll be Equal Itself - Writing Size
+            Writing_Start_Index = (Data_Size < DATA_WIDTH) ? Writing_Start_Index - Writing_Size : DATA_WIDTH - 1;
+	    Done_Element = (Data_Size >= DATA_WIDTH);
+//------------------------------ Store The Decoded Element in Memory ---------------------------------------------	
             if (Data_Size >= DATA_WIDTH) begin
-		// Complete The Decoded Data to reach the DATA_WIDTH
-                for (i = DATA_WIDTH - 1; i >= 0; i = i - 1) begin
-		    if (i <= Writing_Start_Index) begin
-                    	Decoded_Data[i] = Data_Bit;
-		    end
-                end
-		// The Writing Start Index will Return to the First Bit in The Decoded Data
-                Writing_Start_Index = DATA_WIDTH - 1;
-		// Remove The Decoded Data From The Data Size [It'll Be Used in The Next Clock Cycle]
-		// as We may Write More Than one Element 
-                Data_Size = Data_Size - DATA_WIDTH;
-		// Write The Decoded Data to Memory
+		// Update Ram Data 
                 RAM_Data = Decoded_Data;
-		Done_Element = 1; //Operation 2
-//------------------------------ Calculate The RAM Address ---------------------------------------------
+		// Calculate The RAM Address 
 		// IF Matrix A is Done and This is a New Row => Change To Matrix B Address
 	    	if((RowsCount == N + 1) && Update_Address_Indication_Bit) begin
 			Update_Address_Indication_Bit = 0;
@@ -179,22 +181,11 @@ module Decoder_Receiver #(parameter ADDRESS_WIDTH = 13,
 		if(N_Indication_Bit == 0) begin
 		    N_Indication_Bit = 1;
                     N = Decoded_Data[11:0];
-		end
+		end	    
             end
-//---------------------------------------------------------------------------------------------------------
-            // If Data_Size < DATA_WIDTH => Operation 1 => Process The Current Packet
-	    // But I need Some Calculations To Now Where should I Write the Decoded Data	
-            else if (Data_Size < DATA_WIDTH) begin
-                Writing_Size = Data_Size - (DATA_WIDTH - 1 - Writing_Start_Index);
-		Writing_Last_Index = Writing_Start_Index - Writing_Size;
-                for (i = 63; i >= 0; i = i - 1) begin
-		    if(i <= Writing_Start_Index && i > Writing_Last_Index) begin
-                    	Decoded_Data[i] = Data_Bit;
-		    end
-                end
-                Writing_Start_Index = Writing_Start_Index - Writing_Size;
-                Done_Element = 0; //Operation 1
-            end    
+	    // Remove The Decoded Data From The Data Size [It'll Be Used in The Next Clock Cycle]
+	    // as We may Write More Than one Element 
+	    Data_Size = (Data_Size >= DATA_WIDTH) ? Data_Size - DATA_WIDTH: Data_Size;
         end
 //--------------------------------- The Main Procedure End ----------------------------------------------------//
 //--------------------- Initilization that I want to be Done before starting the Main Procedure --------------//
