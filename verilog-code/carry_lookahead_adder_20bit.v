@@ -8,8 +8,8 @@ module carry_lookahead_adder_20bit(sub, in0, in1, cin, sum, cout, v);
 	output v;
 	wire c1,c2,c3,c4;
 	wire v1,v2,v3,v4;
-	reg tempcin;
-	reg [19:0] tempin1;
+	wire tempcin;
+	wire [19:0] tempin1;
 
 	assign tempcin = cin | sub;
 	assign tempin1 = (sub)? (in1 ^ 20'b11111111111111111111) : in1;

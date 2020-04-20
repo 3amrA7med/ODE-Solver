@@ -1,14 +1,14 @@
 module RAM #(parameter ADDRESS_WIDTH = 13,
              parameter DATA_WIDTH = 64,
-             parameter DEPTH = 16)
+             parameter DEPTH = 2**ADDRESS_WIDTH)
             (input CLK,
              input RST,
              input WR_Enable,
              input [ADDRESS_WIDTH - 1 :0] address_RD1,
              input [ADDRESS_WIDTH - 1 :0] address_RD2,
              input [ADDRESS_WIDTH - 1 :0] address_WR,
-             output reg [DATA_WIDTH - 1 :0] dataOut1,
-             output reg [DATA_WIDTH - 1 :0] dataOut2,
+             output [DATA_WIDTH - 1 :0] dataOut1,
+             output [DATA_WIDTH - 1 :0] dataOut2,
              input [DATA_WIDTH - 1 :0] dataIn);
     
     reg [DATA_WIDTH - 1 :0]  Memory[0: DEPTH];
