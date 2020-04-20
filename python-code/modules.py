@@ -36,39 +36,60 @@ def adder(first_operand, second_operand):
     input_1 = np.uint16(int(first_operand, base=2))
     input_2 = np.uint16(int(second_operand, base=2))
     output = np.uint16(0)
+    invalid = 0
+    valid = 0
+    cout = 0
+    tempOut = 0
+    cin = 0
+    sub = 0
 
-    num_1 = np.uint32((input_1 >> 3) << 3)
-    num_2 = np.uint32((input_2 >> 3) << 3)
+    num_1 = np.uint32(input_1 & 0x1FFF)
+    num_2 = np.uint32(input_2 & 0x1FFF)
 
-    SF_1 = input_1 & 0x0007  # scale factor of input 1
-    SF_2 = input_2 & 0x0007  # scale factor of input 2
+    SF_1 = (input_1 >> 13)  # scale factor of input 1
+    SF_2 = (input_2 >> 13)  # scale factor of input 2
     SF_out = 0
     SF_diff = 0
 
+    if num_1 >> 12:
+        num_1 = num_1 | 0xFFFFE000  # sign extend
+    if num_2 >> 12:
+        num_2 = num_2 | 0xFFFFE000  # sign extend
+    if sub:
+        num_2 = (~num_2)
+        cin = 1
+
     if SF_1 == SF_2:
         SF_out = SF_1
-        output = np.uint16(num_1 + num_2)
-        output = output | SF_out
+        tempOut = num_1 + num_2 + cin
     else:
         if SF_1 > SF_2:
             SF_out = SF_1
             SF_diff = SF_1 - SF_2
-            if num_1 >> 15:
-                num_1 = num_1 | 0xFFFF0000  # sign extend
-            if num_2 >> 15:
-                num_2 = num_2 | 0xFFFF0000  # sign extend
-            num_2 = np.uint32(num_2 << SF_diff)
-            output = np.uint16(num_1 + num_2)
-            output = output | SF_out
+            tempOut = num_1 + num_2 + cin
 
         else:
             SF_out = SF_2
             SF_diff = SF_2 - SF_1
-            if num_1 >> 15:
-                num_1 = num_1 | 0xFFFF0000  # sign extend
-            if num_2 >> 15:
-                num_2 = num_2 | 0xFFFF0000  # sign extend
-            num_1 = np.uint32(num_1 << SF_diff)
-            output = np.uint16(num_1 + num_2)
-            output = output | SF_out
+            tempOut = num_1 + num_2 + cin
+
+    #carry out
+    if (tempOut >> 32) == 1:
+        cout = 1
+
+    #overflow
+    if(num_1 >> 31) and (num_2 >> 31) and (not(tempOut & 0x080000000)):
+        invalid = 1
+    if(not(num_1 >> 31)) and (not(num_2 >> 31)) and (tempOut & 0x080000000):
+        invalid = 1
+    #invalid output
+    tempOut = np.uint32(tempOut)
+    if ((tempOut & 0xFFFFF000) == 0xFFFFF000) or ((tempOut & 0xFFFFF000) == 0):
+        valid = 1
+
+    invalid = invalid or (not valid)
+
+    output = np.uint16(tempOut & 0x00001FFF)
+    output = output | (SF_out << 13)
+
     return output
