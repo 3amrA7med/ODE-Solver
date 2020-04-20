@@ -21,15 +21,17 @@ def cli(module, first_operand, second_operand):
 # Function print output in binary and fixed point representation
 def print_output(output):
     print("Output in binary :", bin(output).split('b')[1])
-    sf_out = output & 0x0007
-    if output >> 15:
-        output = (np.uint16((output << 1) >> 4))
-        output = ~output
-        output = output & 0x0FFF
-        output = np.uint16(output + 1)
-        print("Output in decimal :", (output * -1) / pow(2, sf_out))
+    sf_out = output >> 13
+    num = np.uint16(output & 0x1FFF)
+
+    if num >> 12:
+        num = (np.uint16((num << 4) >> 4))
+        num = ~num
+        num = num & 0x0FFF
+        num = np.uint16(num + 1)
+        print("Output in decimal :", (num * -1) / pow(2, sf_out))
     else:
-        print("Output in decimal :", (output >> 3) / pow(2, sf_out))
+        print("Output in decimal :", num / pow(2, sf_out))
 
 
 # Start of the program.
