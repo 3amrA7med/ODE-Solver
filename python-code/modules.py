@@ -7,14 +7,14 @@ def multiplier(first_operand, second_operand):
     input_2 = np.uint16(int(second_operand, base=2))
 
     # Extract scale factor and obtain numbers
-    sf_1 = input_1 & 0x0007  # Scale factor of first operand
-    num_1 = np.uint16(input_1 >> 3)  # Number of first operand
-    if input_1 >> 15:
+    sf_1 = (input_1 & 0xE000) >> 13  # Scale factor of first operand
+    num_1 = np.uint16(input_1 & 0x1FFF)  # Number of first operand
+    if (input_1 >> 12) & 0x0001:
         num_1 = num_1 | 0xFFFFE000   # sign extend
         print(bin(num_1))
-    sf_2 = input_2 & 0x0007  # Scale factor of second operand
-    num_2 = np.uint16(input_2 >> 3)  # Number of second operand
-    if input_2 >> 15:
+    sf_2 = (input_2 & 0xE000) >> 13  # Scale factor of second operand
+    num_2 = np.uint16(input_2 & 0x1FFF)  # Number of second operand
+    if (input_2 >> 12) & 0x0001:
         num_2 = num_2 | 0xFFFFE000  # sign extend
 
     # Calculate sum of scale factors and multiply the 2 numbers
@@ -28,7 +28,7 @@ def multiplier(first_operand, second_operand):
     else:
         output_scale_factor = sum_scale_factor  # Else do nothing
 
-    output = np.uint16((output_number << 3) | output_scale_factor)  # Shift number left 3 bits then OR with scale factor
+    output = np.uint16((output_number & 0x1FFF) | output_scale_factor << 13)  # Shift number left 3 bits then OR with scale factor
     return output
 
 
