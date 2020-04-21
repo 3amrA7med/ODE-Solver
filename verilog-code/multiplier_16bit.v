@@ -47,12 +47,12 @@ module multiplier_16bit(first_operand, second_operand, out,enable,overflow);
 		if(first_operand_scale_factor>second_operand_scale_factor)
 		begin
 			output_scale_factor = first_operand_scale_factor;
-			shift_factor = first_operand_scale_factor - second_operand_scale_factor;
+			shift_factor = second_operand_scale_factor;
 		end
 		else
 		begin 
 			output_scale_factor = second_operand_scale_factor;
-			shift_factor = second_operand_scale_factor -first_operand_scale_factor;
+			shift_factor = first_operand_scale_factor;
 		end
 		/*
 		temp_result_scale_factor = first_operand_scale_factor + second_operand_scale_factor;
