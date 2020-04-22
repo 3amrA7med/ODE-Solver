@@ -1,5 +1,64 @@
 import numpy as np
 
+def binary_representer(number, scale_factor):
+    whole, dec = str(number).split(".") 
+    whole = int(whole) 
+    dec = int (dec) 
+    res = bin(whole).lstrip("0b") + "."
+    for x in range(scale_factor): 
+        if(str((decimal_converter(dec)) * 2) == "0"):
+            whole, dec = "0.0".split(".") 
+        else:
+            whole, dec = str((decimal_converter(dec)) * 2).split(".")   
+        dec = int(dec) 
+        res += whole 
+  
+    return res 
+  
+def decimal_converter(num):  
+    while num > 1: 
+        num /= 10
+    return num 
+#function that converts decimal to binary  
+def dec2bin(number,accuracy):
+    if(int(accuracy) > 7 or int(accuracy) < 0):
+        print("accuracy must be within 0 and 7")
+        return
+    negative = False
+    if(number.find("-") != -1):
+        negative = True
+        number = number.lstrip("-")
+    
+    output_number = binary_representer(number, scale_factor = int(accuracy))
+    if(negative):
+        print("number is :", "-" + output_number) 
+    else:
+        print("number is :", output_number) 
+
+    integerVal, floatVal = output_number.split(".")
+    binary_rep = integerVal+floatVal
+    if(negative):
+        negative_number = np.uint32(int(binary_rep, base=2))
+        negative_number = ~negative_number + 1
+        binary_rep = bin(negative_number)[2:]
+        first_zero = binary_rep.find("0")
+        if (first_zero != -1 and first_zero != 0):
+            binary_rep = binary_rep[first_zero-1:]
+    print(binary_rep)
+
+    if(len(binary_rep) > 13):
+        print("this input with this accuracy can't be represented because it exceeds 13 bits")
+        return
+    elif (len(binary_rep) == 13 and not negative):
+        print("this input with this accuracy can't be represented because it exceeds 13 bits")
+        return
+    if(negative):
+        binary_rep = binary_rep.rjust(13,"1")
+    else:
+        binary_rep = binary_rep.zfill(13)
+    scale_factor = bin(int(accuracy))[2:].zfill(3)
+    print("input representation is :", scale_factor+binary_rep)
+
 
 # Function multiplier that simulates module multiplier hardware
 def multiplier(first_operand, second_operand):
@@ -7,29 +66,44 @@ def multiplier(first_operand, second_operand):
     input_2 = np.uint16(int(second_operand, base=2))
 
     # Extract scale factor and obtain numbers
-    sf_1 = input_1 & 0x0007  # Scale factor of first operand
-    num_1 = np.uint16(input_1 >> 3)  # Number of first operand
-    if input_1 >> 15:
+    sf_1 = (input_1 & 0xE000) >> 13  # Scale factor of first operand
+    num_1 = np.uint16(input_1 & 0x1FFF)  # Number of first operand
+    if (input_1 >> 12) & 0x0001:
         num_1 = num_1 | 0xFFFFE000   # sign extend
         print(bin(num_1))
-    sf_2 = input_2 & 0x0007  # Scale factor of second operand
-    num_2 = np.uint16(input_2 >> 3)  # Number of second operand
-    if input_2 >> 15:
+    sf_2 = (input_2 & 0xE000) >> 13  # Scale factor of second operand
+    num_2 = np.uint16(input_2 & 0x1FFF)  # Number of second operand
+    if (input_2 >> 12) & 0x0001:
         num_2 = num_2 | 0xFFFFE000  # sign extend
 
     # Calculate sum of scale factors and multiply the 2 numbers
-    sum_scale_factor = sf_1 + sf_2
-    output_number = np.uint32(num_1 * num_2)
+    max_scale_factor = 0
+    shift_factor = 0  # Calculate how much the num needed to be shifted right
 
-    if sum_scale_factor > 7:
-        output_scale_factor = np.uint16(7)  # Assign output scale factor to 7 (Max possible scale factor)
-        shift_factor = sum_scale_factor - output_scale_factor  # Calculate how much the num needed to be shifted right
-        output_number = np.uint16(output_number >> shift_factor)  # Shift the number right
+    if sf_1 > sf_2:
+        max_scale_factor = sf_1
+        shift_factor = sf_2
     else:
-        output_scale_factor = sum_scale_factor  # Else do nothing
+        max_scale_factor = sf_2
+        shift_factor = sf_1
+    # sum_scale_factor = sf_1 + sf_2
+    
+    output_number = np.uint32(num_1 * num_2)
+    output_number = np.uint16(output_number >> shift_factor)  # Shift the number right
+    output_scale_factor = max_scale_factor
+    overflow = None
+    if ((output_number & 0xFFFFE000) == 0xFFFFE000) or ((output_number & 0xFFFFE000) == 0x00000000):
+        overflow = False
+    else:
+        overflow = True 
+    # if sum_scale_factor > 7:
+    #     output_scale_factor = np.uint16(7)  # Assign output scale factor to 7 (Max possible scale factor)
+    #     output_number = np.uint16(output_number >> shift_factor)  # Shift the number right
+    # else:
+    #     output_scale_factor = sum_scale_factor  # Else do nothing
 
-    output = np.uint16((output_number << 3) | output_scale_factor)  # Shift number left 3 bits then OR with scale factor
-    return output
+    output = np.uint16((output_number & 0x1FFF) | output_scale_factor << 13)  # Shift number left 3 bits then OR with scale factor
+    return output,overflow
 
 
 def adder(first_operand, second_operand):

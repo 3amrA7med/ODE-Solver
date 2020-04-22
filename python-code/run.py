@@ -1,21 +1,32 @@
 import click
-from modules import multiplier, adder
+from modules import multiplier, adder, dec2bin
 import numpy as np
 
 
 @click.command()
 @click.option('-m', '--module', default='multiplier',
-              help='Choose module you want to run.', type=click.Choice(['multiplier', 'adder']))
+              help='Choose module you want to run.', type=click.Choice(['multiplier', 'adder','dec2bin']))
+@click.option('-n', '--number',
+              help='Write number in decimal floating representation.')
+@click.option('-a', '--accuracy',
+              help='Write the accuracy a.k.a scale factor.')
+
 @click.option('-f', '--first_operand',
-              help='first operand in fixed point representation', required=True)
-@click.option('-s', '--second_operand', required=True,
+              help='first operand in fixed point representation')
+@click.option('-s', '--second_operand',
               help='second operand in fixed point representation.')
-def cli(module, first_operand, second_operand):
+def cli(module, first_operand, second_operand, number, accuracy):
+    overflow = None
     if module == "multiplier":
-        output = multiplier(first_operand, second_operand)
+        output, overflow = multiplier(first_operand, second_operand)
+        print("overflow is", overflow)
+        print_output(output)
     if module == "adder":
         output = adder(first_operand, second_operand)
-    print_output(output)
+        print_output(output)
+    if module == "dec2bin":
+            dec2bin(number, accuracy)
+   
 
 
 # Function print output in binary and fixed point representation

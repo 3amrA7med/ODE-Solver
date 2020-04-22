@@ -1,4 +1,4 @@
-vlog Euler.v
+vlog *.v
 
 quit -sim
 
@@ -8,7 +8,7 @@ radix -unsigned
 
 add wave *
 
-for {set i 0} {$i < 101} {incr i} {
+for {set i 0} {$i < 3500} {incr i} {
     mem load -filltype value -filldata $i -fillradix unsigned /Euler/Memory/Memory($i)
 }
 
@@ -19,51 +19,10 @@ run
 
 
 force INT 1
-run
-run
+run 200 ps
 force PROCESS 1
-run
-run
-run
-run
+run 400ps
 force Interpolate_DONE 1
-run
-run
+run 200ps
 force Interpolate_DONE 0
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
+run 3700ps

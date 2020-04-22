@@ -1,6 +1,7 @@
 # Project folders
 verilog-code/work
 verilog-code/transcript
+verilog-dofiles/correct_output.txt
 IO Module/work
 IO Module/transcript
 Euler/Pre-Synthesis/work
@@ -26,3 +27,4 @@ __pycache__/
 *.py[cod]
 *$py.class
 .idea
+.vscode/settings.json
