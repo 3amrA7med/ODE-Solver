@@ -11,18 +11,25 @@ import numpy as np
 @click.option('-a', '--accuracy',
               help='Write the accuracy a.k.a scale factor.')
 
+@click.option('-sub', '--sub',
+              help='Enter 0 for Add or 1 for Subtract.')
+@click.option('-c', '--cin',
+              help='Enter 0 or 1 for carry in.')
+
 @click.option('-f', '--first_operand',
               help='first operand in fixed point representation')
 @click.option('-s', '--second_operand',
               help='second operand in fixed point representation.')
-def cli(module, first_operand, second_operand, number, accuracy):
+def cli(module, first_operand, second_operand, number, accuracy, sub, cin):
     overflow = None
     if module == "multiplier":
         output, overflow = multiplier(first_operand, second_operand)
         print("overflow is", overflow)
         print_output(output)
     if module == "adder":
-        output = adder(first_operand, second_operand)
+        output, cout, overflow = adder(first_operand, second_operand, sub, cin)
+        print("Cout is ", cout)
+        print("Overflow is ", overflow)
         print_output(output)
     if module == "dec2bin":
             dec2bin(number, accuracy)
