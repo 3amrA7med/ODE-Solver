@@ -70,7 +70,7 @@ def multiplier(first_operand, second_operand):
     num_1 = np.uint16(input_1 & 0x1FFF)  # Number of first operand
     if (input_1 >> 12) & 0x0001:
         num_1 = num_1 | 0xFFFFE000   # sign extend
-        print(bin(num_1))
+        # print(bin(num_1))
     sf_2 = (input_2 & 0xE000) >> 13  # Scale factor of second operand
     num_2 = np.uint16(input_2 & 0x1FFF)  # Number of second operand
     if (input_2 >> 12) & 0x0001:

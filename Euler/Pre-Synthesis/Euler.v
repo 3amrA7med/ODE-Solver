@@ -34,36 +34,6 @@ parameter   Start=3'b000,
     wire invalid[8:0], overflow[1:0];
 
     initial begin
-        RAM_ENABLE_WR=0;
-        A_ADD=0;
-        B_ADD=0;
-        X_ADD=0;
-        U_ADD=0;
-        h_ADD=0;
-        XNew_ADD=0;
-        n_ADD=0;
-        m_ADD=0;
-        RAM_ADD_RD1=0;
-        RAM_ADD_RD2=0;
-        RAM_ADD_WR=0;
-        n_val=0;
-        m_val=0;
-        h_val=0;
-        Interpolate_Enable=0;
-        Matrix_Multiplication1_Enable=0;
-        Matrix_Multiplication2_Enable=0;
-        Final_Calc_Enable=0;
-        VECTOR_ADD=0;
-        MATRIX_ADD=0;
-        VECTOR_CNT=0;
-        MATRIX_CNT=0;
-        Element_Result=0;
-        counter=0;
-        RES1_ADD=0;
-        RES2_ADD=0;
-        VECTOR2_ADD=0;
-        RESULT_ADD=0;
-        RAM_DATA_WR=0;
     end
 
     always@(negedge CLK)    begin
@@ -143,7 +113,9 @@ parameter   Start=3'b000,
                         RESULT_ADD=NEW_RESULT_ADD;
                         VECTOR_CNT=NEW_VECTOR_CNT;
                         counter=0;
-                    end 
+                    end
+                    default:    counter=0;
+
                 endcase
             end
         endcase
@@ -175,6 +147,7 @@ parameter   Start=3'b000,
                 RES1_ADD=5307;
                 RES2_ADD=5357;
                 XNew_ADD=5407;
+                counter=0;
                 Back=1;
                 
             end
@@ -236,17 +209,18 @@ parameter   Start=3'b000,
                 end
             end
 
-
+            
         endcase
 
 
 
         if(INT) begin
             if(!PROCESS) begin
-                case(state)
-                    Start: if(!DONE)  next = Init;
-                    Init:   next = Start;
-                endcase
+                if (state==Init) next = Start;
+                else begin
+                    if(!DONE)  next = Init;
+                    else next=Start;
+                end
             end
             else begin
                 case (state)
@@ -286,7 +260,7 @@ parameter   Start=3'b000,
                     Final_Calc: begin
                         if(VECTOR_CNT==n_val)   next=Start;
                     end
-
+                    default:    next=Start;
                 endcase
             end
         end

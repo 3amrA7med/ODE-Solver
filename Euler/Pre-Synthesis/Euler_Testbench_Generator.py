@@ -1,5 +1,7 @@
 import numpy as np
 import sys
+sys.path.append('../..')
+from python_code.modules import multiplier,adder
 
 def init():
     out.write('vlog *.v\n')
@@ -29,6 +31,37 @@ def writeIF(value,test,index):
     out.write('error "Test'+str(test)+': Failed, XNew['+str(index)+'] != '+str(value)+'"\n')
     out.write('}\n')
 
+def MatrixMultiplication(matrix,vector):
+    result = np.zeros((matrix.shape[0],1)).astype('int')
+    # print(result)
+    for i in range(0,matrix.shape[0]):
+        for j in range(0,vector.shape[0]):
+            m="{0:016b}".format(matrix[i,j])
+            v="{0:016b}".format(vector[j,0])
+            mul="{0:016b}".format(multiplier(m,v)[0])
+            res="{0:016b}".format(result[i,0])
+            result[i],cout, inv = adder(res,mul,0,0)
+            result[i]+=(cout<<16)
+    return result
+
+def Final(Res1,Res2,h_val,X_vec):
+    result = np.zeros((Res1.shape[0],1)).astype('int')
+    
+    h_val="{0:016b}".format(h_val)
+    for i in range(0,Res1.shape[0]):
+        R1="{0:016b}".format(Res1[i,0])
+        R2="{0:016b}".format(Res2[i,0])
+        X_b="{0:016b}".format(X_vec[i,0])
+
+        sumR,cout,inv = adder(R1,R2,0,0)
+        sumR+=(cout<<16)
+        sumR = "{0:016b}".format(sumR)
+        mulH = "{0:016b}".format(multiplier(sumR,h_val)[0])
+        result[i],cout,inv =adder(X_b,mulH,0,0)
+        result[i]+=(cout<<16)
+    return result
+
+
 n_ADD=0
 m_ADD=1
 h_ADD=4
@@ -36,43 +69,38 @@ A_ADD=7
 B_ADD=2507
 X_ADD=5207
 U_ADD=5257
-
 out=open('stress_testbench.do','w')
 
 testcase=int(sys.argv[1])  #Number of testcases
 init()
 
+tc=0
+
 for tc in range(0,testcase):
-    out.write('\n\n################################################## Testcase: ' + str(tc) +' ##################################################\n')
     n=np.random.randint(1,51)
     m=np.random.randint(1,51)
     h=np.random.randint(1,11)
+    A = np.random.randint(0,1<<13,(n,n)).astype('int')
+    X = np.random.randint(0,1<<13,(n,1)).astype('int')
+    B = np.random.randint(0,1<<13,(n,m)).astype('int')
+    U = np.random.randint(0,1<<13,(m,1)).astype('int')
+
+    # R1=np.dot(B,U)
+    # R2=np.dot(A,X)
+    # Ans=(R1+R2)*h+X
+    R1=MatrixMultiplication(B,U)
+    R2=MatrixMultiplication(A,X)
+    Ans=Final(R1,R2,h,X)
+
+    out.write('\n\n################################################## Testcase: ' + str(tc) +' ##################################################\n')
     writeMemory(n,n_ADD)
     writeMemory(m,m_ADD)
     writeMemory(h,h_ADD)
-    A = np.random.randint(1,6,(n,n));   writeMatrix('A',A,A_ADD)
-    X = np.random.randint(1,6,(n,1));   writeMatrix('X',X,X_ADD)
-    B = np.random.randint(1,6,(n,m));   writeMatrix('B',B,B_ADD)
-    U = np.random.randint(1,6,(m,1));   writeMatrix('U',U,U_ADD)
+    writeMatrix('A',A,A_ADD)
+    writeMatrix('X',X,X_ADD)
+    writeMatrix('B',B,B_ADD)
+    writeMatrix('U',U,U_ADD)
 
-    R1=np.dot(B,U)
-    R2=np.dot(A,X)
-    Ans=(R1+R2)*h+X
-    # print(n,m,h)
-    # print("A")
-    # print(A)
-    # print("X")
-    # print(X)
-    # print("B")
-    # print(B)
-    # print("U")
-    # print(U)
-    # print("R1")
-    # print(R1)
-    # print("R2")
-    # print(R2)
-    # print("Ans")
-    # print(Ans)
     out.write('force INT 1\n')
     out.write('run 200 ps\n')
     out.write('force PROCESS 1\n')
@@ -87,12 +115,14 @@ for tc in range(0,testcase):
     for i in range(0,n):
         out.write('run 300 ps\n')
         writeIF(Ans[i,0],tc,i)
-    
+
+
+    out.write('puts "Test '+str(tc)+' Passed!"\n')
     out.write('run 250 ps\n')
     out.write('force INT 0\n')
     out.write('force PROCESS 0\n')
     out.write('run 100 ps\n')
-    
+
 
 out.write('puts "All tests Passed Successfully!"\n')
 out.close()
