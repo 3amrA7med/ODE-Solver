@@ -106,33 +106,38 @@ def multiplier(first_operand, second_operand):
     return output,overflow
 
 
-def adder(first_operand, second_operand):
+def adder(first_operand, second_operand, sub, cin):
     input_1 = np.uint16(int(first_operand, base=2))
     input_2 = np.uint16(int(second_operand, base=2))
+    sub = int(sub)
+    cin = int(cin)
+
     output = np.uint16(0)
     invalid = 0
     valid = 0
     cout = 0
     tempOut = 0
-    cin = 0
-    sub = 0
 
+    #convert to 32bit for sign extend
     num_1 = np.uint32(input_1 & 0x1FFF)
     num_2 = np.uint32(input_2 & 0x1FFF)
 
     SF_1 = (input_1 >> 13)  # scale factor of input 1
     SF_2 = (input_2 >> 13)  # scale factor of input 2
-    SF_out = 0
-    SF_diff = 0
+    SF_out = 0              # initialize output scale factor
+    SF_diff = 0             # initialize scale factor difference
 
     if num_1 >> 12:
         num_1 = num_1 | 0xFFFFE000  # sign extend
     if num_2 >> 12:
         num_2 = num_2 | 0xFFFFE000  # sign extend
-    if sub:
-        num_2 = (~num_2)
-        cin = 1
 
+    # if subtract get 2's complement of the second operand
+    if sub == 1:
+        num_2 = (~num_2)        # 1's complement
+        cin = 1                 # force cin to be 1 to get 2's complement
+
+    # if scale factor of inputs match then output scale factor match and add directly without shift
     if SF_1 == SF_2:
         SF_out = SF_1
         tempOut = num_1 + num_2 + cin
@@ -140,30 +145,40 @@ def adder(first_operand, second_operand):
         if SF_1 > SF_2:
             SF_out = SF_1
             SF_diff = SF_1 - SF_2
+            num_2 = num_2 << SF_diff
             tempOut = num_1 + num_2 + cin
 
         else:
             SF_out = SF_2
             SF_diff = SF_2 - SF_1
+            num_1 = num_1 << SF_diff
             tempOut = num_1 + num_2 + cin
 
-    #carry out
+    # carry out
     if (tempOut >> 32) == 1:
         cout = 1
 
-    #overflow
+    # overflow
+    # if 2 inputs are negative and output is positive
     if(num_1 >> 31) and (num_2 >> 31) and (not(tempOut & 0x080000000)):
         invalid = 1
+    # if 2 inputs are positive and output is negative
     if(not(num_1 >> 31)) and (not(num_2 >> 31)) and (tempOut & 0x080000000):
         invalid = 1
-    #invalid output
-    tempOut = np.uint32(tempOut)
+
+    # invalid output
+    tempOut = np.uint32(tempOut)        # get output without carry
+    # output number can be represented in 13 bits which are dedicated to it in our fixed point representation
+    # the left most bits represent sign only, weather all are ones or all are zeros
     if ((tempOut & 0xFFFFF000) == 0xFFFFF000) or ((tempOut & 0xFFFFF000) == 0):
         valid = 1
 
+    # invalid of overflow occurs in addition or output can't be represented in 13 bits
     invalid = invalid or (not valid)
 
+    # take the least 13 bits to be our output
     output = np.uint16(tempOut & 0x00001FFF)
-    output = output | (SF_out << 13)
+    # scale factor of output
+    output = np.uint16(output | (SF_out << 13))
 
-    return output
+    return output, cout, invalid
