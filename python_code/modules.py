@@ -88,7 +88,7 @@ def multiplier(first_operand, second_operand):
         shift_factor = sf_1
     # sum_scale_factor = sf_1 + sf_2
     
-    output_number = np.uint32(num_1 * num_2)
+    output_number = np.int32(np.int32(num_1) * np.int32(num_2))
     output_number = np.uint16(output_number >> shift_factor)  # Shift the number right
     output_scale_factor = max_scale_factor
     overflow = None

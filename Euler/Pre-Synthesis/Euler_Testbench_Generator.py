@@ -32,20 +32,18 @@ def writeIF(value,test,index):
     out.write('}\n')
 
 def MatrixMultiplication(matrix,vector):
-    result = np.zeros((matrix.shape[0],1)).astype('int')
-    # print(result)
+    result = np.zeros((matrix.shape[0],1)).astype('uint16')
     for i in range(0,matrix.shape[0]):
         for j in range(0,vector.shape[0]):
             m="{0:016b}".format(matrix[i,j])
             v="{0:016b}".format(vector[j,0])
             mul="{0:016b}".format(multiplier(m,v)[0])
             res="{0:016b}".format(result[i,0])
-            result[i],cout, inv = adder(res,mul,0,0)
-            result[i]+=(cout<<16)
+            result[i] = adder(res,mul,0,0)[0]
     return result
 
 def Final(Res1,Res2,h_val,X_vec):
-    result = np.zeros((Res1.shape[0],1)).astype('int')
+    result = np.zeros((Res1.shape[0],1)).astype('uint16')
     
     h_val="{0:016b}".format(h_val)
     for i in range(0,Res1.shape[0]):
@@ -53,12 +51,10 @@ def Final(Res1,Res2,h_val,X_vec):
         R2="{0:016b}".format(Res2[i,0])
         X_b="{0:016b}".format(X_vec[i,0])
 
-        sumR,cout,inv = adder(R1,R2,0,0)
-        sumR+=(cout<<16)
+        sumR= adder(R1,R2,0,0)[0]
         sumR = "{0:016b}".format(sumR)
         mulH = "{0:016b}".format(multiplier(sumR,h_val)[0])
-        result[i],cout,inv =adder(X_b,mulH,0,0)
-        result[i]+=(cout<<16)
+        result[i]=adder(X_b,mulH,0,0)[0]
     return result
 
 
@@ -79,11 +75,11 @@ tc=0
 for tc in range(0,testcase):
     n=np.random.randint(1,51)
     m=np.random.randint(1,51)
-    h=np.random.randint(1,11)
-    A = np.random.randint(0,1<<13,(n,n)).astype('int')
-    X = np.random.randint(0,1<<13,(n,1)).astype('int')
-    B = np.random.randint(0,1<<13,(n,m)).astype('int')
-    U = np.random.randint(0,1<<13,(m,1)).astype('int')
+    h=np.random.randint(1,1<<16)
+    A = np.random.randint(0,1<<16,(n,n)).astype('uint16')
+    X = np.random.randint(0,1<<16,(n,1)).astype('uint16')
+    B = np.random.randint(0,1<<16,(n,m)).astype('uint16')
+    U = np.random.randint(0,1<<16,(m,1)).astype('uint16')
 
     # R1=np.dot(B,U)
     # R2=np.dot(A,X)
