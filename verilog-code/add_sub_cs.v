@@ -36,13 +36,11 @@ module add_sub_cs(enable, sub, in1, in2, cin, out, cout, invalid);
 			if(in1[15:13] > in2[15:13]) begin
 				diffScaleFactor = in1[15:13] - in2[15:13];
 				tempIn22 = tempIn2 << diffScaleFactor;
-				tempIn11  = tempIn1;
 				newScaleFactor = in1[15:13];
 
 			end else begin
 				diffScaleFactor = in2[15:13] - in1[15:13];
 				tempIn11 = tempIn1 << diffScaleFactor;
-				tempIn22 = tempIn2;
 				newScaleFactor = in2[15:13];			
 
 			end

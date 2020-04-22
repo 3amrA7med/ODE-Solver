@@ -1,14 +1,9 @@
-delete wave *
 add wave sim:/ODE_Solver_Chip/Memory/*
 force -freeze sim:/ODE_Solver_Chip/Memory/CLK 1 0, 0 {50 ps} -r 100
-force -freeze sim:/ODE_Solver_Chip/RST 1 0
-force -freeze sim:/ODE_Solver_Chip/Memory/address_RD1 10#0 0
-force -freeze sim:/ODE_Solver_Chip/Memory/address_RD2 10#0 0
+force -freeze sim:/ODE_Solver_Chip/Memory/RST 1 0
 run
-force -freeze sim:/ODE_Solver_Chip/RST 0
+force -freeze sim:/ODE_Solver_Chip/Memory/RST 0
 run  
-force -freeze sim:/ODE_Solver_Chip/Memory/address_RD1 10#0 0
-force -freeze sim:/ODE_Solver_Chip/Memory/address_RD2 10#0 0
 force -freeze sim:/ODE_Solver_Chip/Memory/WR_Enable 1 0
 force -freeze sim:/ODE_Solver_Chip/Memory/address_WR 0000000000001 0
 force -freeze sim:/ODE_Solver_Chip/Memory/dataIn 10#3 0
@@ -85,7 +80,7 @@ force -freeze sim:/ODE_Solver_Chip/Memory/WR_Enable 1 0
 force -freeze sim:/ODE_Solver_Chip/Memory/address_WR 0000000010110 0
 force -freeze sim:/ODE_Solver_Chip/Memory/dataIn 10#99 0
 run
+delete wave *
 force -freeze sim:/ODE_Solver_Chip/Memory/WR_Enable 0
-force -freeze sim:/ODE_Solver_Chip/Done_Processing 1 0
-noforce sim:/ODE_Solver_Chip/Memory/address_RD1
-noforce sim:/ODE_Solver_Chip/Memory/address_RD2
+add wave sim:/ODE_Solver_Chip/IO/RS/*
+force -freeze sim:/ODE_Solver_Chip/IO/RS/Sending_Enable 1 0
