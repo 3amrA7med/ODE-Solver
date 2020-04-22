@@ -62,8 +62,8 @@ def dec2bin(number,accuracy):
 
 # Function multiplier that simulates module multiplier hardware
 def multiplier(first_operand, second_operand):
-    input_1 = np.uint16(int(first_operand, base=2))
-    input_2 = np.uint16(int(second_operand, base=2))
+    input_1 = np.int16(int(first_operand, base=2))
+    input_2 = np.int16(int(second_operand, base=2))
 
     # Extract scale factor and obtain numbers
     sf_1 = (input_1 & 0xE000) >> 13  # Scale factor of first operand
@@ -80,28 +80,21 @@ def multiplier(first_operand, second_operand):
     max_scale_factor = 0
     shift_factor = 0  # Calculate how much the num needed to be shifted right
 
-    if sf_1 > sf_2:
+    if sf_1 > sf_2:   #Take maximum scale factor as output scale factor
         max_scale_factor = sf_1
         shift_factor = sf_2
     else:
         max_scale_factor = sf_2
         shift_factor = sf_1
-    # sum_scale_factor = sf_1 + sf_2
-    
-    output_number = np.uint32(num_1 * num_2)
-    output_number = np.uint16(output_number >> shift_factor)  # Shift the number right
+    output_number = np.uint32(np.uint32(num_1) * np.uint32(num_2))
+    output_number = np.uint32(output_number >> shift_factor)  # Shift the number right
     output_scale_factor = max_scale_factor
-    overflow = None
+    overflow = None #Check for overflow
     if ((output_number & 0xFFFFE000) == 0xFFFFE000) or ((output_number & 0xFFFFE000) == 0x00000000):
         overflow = False
     else:
         overflow = True 
-    # if sum_scale_factor > 7:
-    #     output_scale_factor = np.uint16(7)  # Assign output scale factor to 7 (Max possible scale factor)
-    #     output_number = np.uint16(output_number >> shift_factor)  # Shift the number right
-    # else:
-    #     output_scale_factor = sum_scale_factor  # Else do nothing
-
+    output_number = np.uint16(output_number)
     output = np.uint16((output_number & 0x1FFF) | output_scale_factor << 13)  # Shift number left 3 bits then OR with scale factor
     return output,overflow
 
