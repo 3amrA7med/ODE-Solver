@@ -1,10 +1,11 @@
 # Project folders
 verilog-code/work
 verilog-code/transcript
+verilog-dofiles/correct_output.txt
 IO Module/work
 IO Module/transcript
-Euler/Pre-Synthesis/work
-Euler/Pre-Synthesis/transcript
+Euler/*/work
+Euler/*/transcript
 python-code/binary.txt
 results.txt
 python-code/venv/

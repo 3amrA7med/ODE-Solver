@@ -9,7 +9,7 @@ module ODE_Solver_Chip (input RST,
     
 
     parameter RAM_ADDRESS_WIDTH                       = 13;
-    parameter DATA_WIDTH                              = 64;
+    parameter DATA_WIDTH                              = 32;
     parameter RAM_DEPTH                               = 10000;
 
     wire [RAM_ADDRESS_WIDTH - 1 :0] IO_RAM_WR_Address;
