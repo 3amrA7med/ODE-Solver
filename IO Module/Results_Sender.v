@@ -40,18 +40,6 @@ module Results_Sender #(parameter ADDRESS_WIDTH = 13,
 	// This counter used to state whether we are sending T or X values
     	Counter #(2) T_OR_X_COUNTER (T_OR_X, T_OR_X_Enable, CLK, RST || ((T_OR_X==2'b01)&&T_OR_X_Enable));
     	
-	initial begin
-	num_of_T = 0;
-	num_of_X = 0;
-	RAM_Addr_B = 0; 
-	RAM_Addr_A = 0;
-	Start_Bit = 0;
-	T_Count_Enable = 0; 
-	_64data_Enable = 0; 
-	X_Count_Enable = 0;
-	T_OR_X_Enable = 0;
-	Init_Count_Enable = 0;
-	end
     	always @(posedge CLK) begin
 		if(RST) begin
 			num_of_T = 0;
