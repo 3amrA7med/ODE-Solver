@@ -11,8 +11,8 @@ module RAM #(parameter ADDRESS_WIDTH = 13,
              output [DATA_WIDTH - 1 :0] dataOut2,
              input [DATA_WIDTH - 1 :0] dataIn);
     
-    reg [DATA_WIDTH - 1 :0]  Memory[0: DEPTH];
-    integer i;
+    reg [DATA_WIDTH - 1 :0] Memory[0: DEPTH];
+    integer i = 0;
     always @(posedge CLK) begin
         if (~RST) begin
             if (WR_Enable) begin
@@ -23,7 +23,6 @@ module RAM #(parameter ADDRESS_WIDTH = 13,
             for (i = 0 ;i < DEPTH; i = i + 1)
                  Memory[i] <= 0;
         end
-        
     end
     assign dataOut1 = Memory[address_RD1];
     assign dataOut2 = Memory[address_RD2];

@@ -34,12 +34,12 @@ module IO_Module #(parameter ADDRESS_WIDTH = 13,
     RAM_Data_RD_A, RAM_Data_RD_B, Sender_Memory_Address_RD_A, Sender_Memory_Address_RD_B);
 	
     initial begin
-		RAM_Address_WR   =  {ADDRESS_WIDTH {1'b0}};
+	RAM_Address_WR   =  {ADDRESS_WIDTH {1'b0}};
         RAM_Data_WR      =  {DATA_WIDTH {1'b0}};
         RAM_Address_RD_A =  {ADDRESS_WIDTH {1'b0}};
         RAM_Address_RD_B =  {ADDRESS_WIDTH {1'b0}};
         IO_Memory_WR_Enable = 0;
-		Done_Processing = 0;
+	Done_Processing = 0;
     end
 
     always @* begin

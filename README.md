@@ -27,7 +27,16 @@ Example
 ```python
 python run.py -m multiplier -f 0000000000111001  -s 0000001010100100
 ```
+##Euler
+Euler's testbench is used on small range integers which results using <B>Adder & Multiplier</B> modules still in the range.
+###Generate Testbench
+To generate random testbench <B>do</B> file run the following command:
+```python
+python Euler_Testbench_Generator.py <testcases_number>
+```
+this will result <B>stress_testbench.do</B> do file. You can use it in <B>ModelSim</B>.
 
+##Hardware
 ### Preserved Addresses (Starting Locations)
 ```
 0 => N
