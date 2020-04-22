@@ -7,8 +7,7 @@ module multiplier_16bit(first_operand, second_operand, out,enable,overflow);
 	input signed[15:0] second_operand;
 	wire [31:0] temp_result_wire;
 	reg signed[31:0] temp_result;
-	reg [2:0]first_operand_scale_factor,second_operand_scale_factor,output_scale_factor;
-	reg [3:0]temp_result_scale_factor, shift_factor = 0;
+	reg [2:0]first_operand_scale_factor,second_operand_scale_factor,output_scale_factor, shift_factor = 0;
 	reg signed[15:0]first_operand_number,second_operand_number;
         reg signed[12:0] output_number;
 	output reg signed[15:0] out;
@@ -42,8 +41,6 @@ module multiplier_16bit(first_operand, second_operand, out,enable,overflow);
 
 		
 		// Calculate new scale factor
-
-		temp_result_scale_factor = (first_operand_scale_factor>second_operand_scale_factor) ? first_operand_scale_factor :second_operand_scale_factor;
 		if(first_operand_scale_factor>second_operand_scale_factor)
 		begin
 			output_scale_factor = first_operand_scale_factor;
@@ -54,22 +51,8 @@ module multiplier_16bit(first_operand, second_operand, out,enable,overflow);
 			output_scale_factor = second_operand_scale_factor;
 			shift_factor = first_operand_scale_factor;
 		end
-		/*
-		temp_result_scale_factor = first_operand_scale_factor + second_operand_scale_factor;
-		// If the result of the scale factor addition is greater than 7 we should make the scale factor of the output = 7 
-		// , and shift the resulted number right 
-		if(temp_result_scale_factor[3] > 1'b1)
-		begin
-			output_scale_factor = 3'b111;
-			shift_factor = temp_result_scale_factor - 3'b111;
-		end
-		else
-		begin 
-			shift_factor = 4'b0000;
-			output_scale_factor = temp_result_scale_factor[2:0];
-		end
-		*/
 		temp_result = temp_result >>> shift_factor; // Shift and keep the sign
+		
 		// Assign output number with the same Fixed point representation mentioned above 
 		output_number = temp_result[12:0];
 		assign out = {output_scale_factor,output_number} ;
