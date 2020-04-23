@@ -1,9 +1,12 @@
 import numpy as np
 import sys
-# Function multiplier that simulates module multiplier hardware
+# Function division that simulates module division hardware
 def division(reset, dividend, divisor):
+    # indicate division by zero 
     divideByZero = 0
+    # indicate that the operation is finished 
     ready = 0
+    # indicate overflow 
     overFlow = 0
     input_1 = np.uint16(int(dividend, base=2))
     input_2 = np.uint16(int(divisor, base=2))
