@@ -1,4 +1,4 @@
-module add_sub_cs(enable, sub, in1, in2, cin, out, cout, invalid);
+module add_sub_cs(enable, sub, in1, in2, cin, reset, out, cout, invalid);
 
 	input signed [15:0] in1;
 	input signed [15:0] in2;
@@ -11,6 +11,7 @@ module add_sub_cs(enable, sub, in1, in2, cin, out, cout, invalid);
 	reg [2:0] newScaleFactor;
 	wire [19:0] tempOut;
 	input sub;
+	input reset;
 	wire tempCout;
 	input cin;
 	input enable;
@@ -56,8 +57,9 @@ module add_sub_cs(enable, sub, in1, in2, cin, out, cout, invalid);
 	end
 
 	//post
-	always @ (tempOut or v or tempCout)
+	always @ (*)
 	begin
+		if(!reset) begin
 		if(enable) begin
 
 			out[12:0] = tempOut[12:0];
@@ -67,6 +69,11 @@ module add_sub_cs(enable, sub, in1, in2, cin, out, cout, invalid);
 			invalid = !valid;
 			cout = tempCout;
 		end
+		end else begin
+			out[15:0] = 16'b0000000000000000;
+			cout = 0;
+			invalid = 0;
+		end 
 	end
 
 endmodule
