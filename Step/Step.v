@@ -88,24 +88,24 @@ reg [ADDRESS_WIDTH-1:0] Hinit_ADD ;
 reg [3:0]State;
 reg [3:0]NextState;
 
-localparam Start = 4'd_0;
-localparam Euler = 4'd_1;
-localparam Fixed = 4'd_2;
-localparam Step = 4'd_3;
-localparam hstate_zero = 4'd_4;
-localparam Read = 4'd_5;
-localparam Write1 = 4'd_6;
-localparam Write2 = 4'd_7;
+reg[3:0] Start ;
+reg[3:0] Euler ;
+reg[3:0] Fixed ;
+reg[3:0] Step;
+reg[3:0] hstate_zero ;
+reg[3:0] Read ;
+reg[3:0] Write1 ;
+reg[3:0] Write2 ;
 // for Error calclation
 
-localparam Read2 = 4'd_8;
-localparam Process_error = 4'd_9;
-localparam Error = 4'd_10;
-localparam Compare = 4'd_11;
-localparam Continue = 4'd_12;
-localparam Check_Result_Time = 4'd_13;
-localparam helper = 4'd_14;
-localparam  Division_State = 4'd_15 ;
+reg[3:0] Read2 ;
+reg[3:0] Process_error ;
+reg[3:0] Error ;
+reg[3:0] Compare ;
+reg[3:0] Continue ;
+reg[3:0] Check_Result_Time ;
+reg[3:0] helper ;
+reg[3:0]  Division_State  ;
 
 
 
@@ -129,6 +129,27 @@ end
 always @(posedge CLK) begin
 //$display("RST" , RST);
    if(RST)begin
+
+      // States
+
+       Start = 4'd_0;
+       Euler = 4'd_1;
+       Fixed = 4'd_2;
+       Step = 4'd_3;
+       hstate_zero = 4'd_4;
+       Read = 4'd_5;
+       Write1 = 4'd_6;
+       Write2 = 4'd_7;
+      // for Error calclation
+
+       Read2 = 4'd_8;
+       Process_error = 4'd_9;
+       Error = 4'd_10;
+       Compare = 4'd_11;
+       Continue = 4'd_12;
+       Check_Result_Time = 4'd_13;
+       helper = 4'd_14;
+       Division_State = 4'd_15 ;
       // modules Initializtion
 
       adder_enable1 = 1;
@@ -343,8 +364,8 @@ end
 Read:begin
 State = Read;
 
-RAM_Address_RD_A[15:0] = adder_out1;  // load address of xprocess  + count
-RAM_Address_RD_B[15:0] = adder_out2; // load address of xinit  + count
+RAM_Address_RD_A = adder_out1[12:0];  // load address of xprocess  + count
+RAM_Address_RD_B = adder_out2[12:0]; // load address of xinit  + count
 
 //$display("ADD A = ", RAM_Address_RD_A );
 //$display("DAta at ADD A",RAM_Data_RD_A);
@@ -363,7 +384,7 @@ end
 Write1:begin             // write x process at (xn+1)0
 State = Write1;
 RAM_Data_WR = RAM_Data_RD_A;
-RAM_Address_WR[15:0] = adder_out2;    // write x process at xn+1
+RAM_Address_WR = adder_out2[12:0];    // write x process at xn+1
 Step_Memory_WR_Enable = 1'b1;
 //$display("RAM_Address_WR ", RAM_Address_WR );
 //$display("DAta that will be written ",RAM_Data_WR);
@@ -379,7 +400,7 @@ end
 Write2:begin             // write x init  at x process
 State = Write2;
 RAM_Data_WR = RAM_Data_RD_B;
-RAM_Address_WR [15:0] = adder_out1;    // write x process at xn+1
+RAM_Address_WR = adder_out1[12:0];    // write x process at xn+1
 //$display("RAM_Address_WR ", RAM_Address_WR );
 //$display("DAta that will be written ",RAM_Data_WR);
 count = adder_out2[12:0];
@@ -473,8 +494,8 @@ hnew = 0;
 NextState = Compare;
 end
 else begin
-RAM_Address_RD_A [15:0] = adder_out1;
-RAM_Address_RD_B [15:0] = adder_out2;
+RAM_Address_RD_A = adder_out1[12:0];
+RAM_Address_RD_B = adder_out2[12:0];
 //$display("ADD A = ", RAM_Address_RD_A );
 //$display("DAta at ADD A",RAM_Data_RD_A);
 //$display("ADD B = ", RAM_Address_RD_B );

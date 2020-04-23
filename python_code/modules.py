@@ -124,26 +124,33 @@ def adder(first_operand, second_operand, sub, cin):
     if num_2 >> 12:
         num_2 = num_2 | 0xFFFFE000  # sign extend
 
-    # if subtract get 2's complement of the second operand
-    if sub == 1:
-        num_2 = (~num_2)        # 1's complement
-        cin = 1                 # force cin to be 1 to get 2's complement
-
     # if scale factor of inputs match then output scale factor match and add directly without shift
     if SF_1 == SF_2:
         SF_out = SF_1
+        # if subtract get 2's complement of the second operand
+        if sub == 1:
+            num_2 = (~num_2)
+            cin = 1  # force cin to be 1 to get 2's complement
         tempOut = num_1 + num_2 + cin
     else:
         if SF_1 > SF_2:
             SF_out = SF_1
             SF_diff = SF_1 - SF_2
             num_2 = num_2 << SF_diff
+            # if subtract get 2's complement of the second operand
+            if sub == 1:
+                num_2 = (~num_2)
+                cin = 1  # force cin to be 1 to get 2's complement
             tempOut = num_1 + num_2 + cin
 
         else:
             SF_out = SF_2
             SF_diff = SF_2 - SF_1
             num_1 = num_1 << SF_diff
+            # if subtract get 2's complement of the second operand
+            if sub == 1:
+                num_2 = (~num_2)
+                cin = 1  # force cin to be 1 to get 2's complement
             tempOut = num_1 + num_2 + cin
 
     # carry out
