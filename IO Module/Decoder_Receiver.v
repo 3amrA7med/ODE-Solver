@@ -100,16 +100,11 @@ module Decoder_Receiver #(parameter ADDRESS_WIDTH = 13,
 				if (Start_Bit && ~Done_Loading) begin
 
 					// Done Element Delayed as I Want to stall the Next Packet not The Current One
-					if(~Done_Element_Delayed) 
-						// IF Reached The Last Small Packet in The 32 bits => Start from the Beginning Again
-						if (Small_Packet_Indication_Bit_Location == PacketSize - 1) begin
-							Small_Packet_Indication_Bit_Location = 31;
-						end
-						// Go To The Next Packet
-						else begin
-							Small_Packet_Indication_Bit_Location = Small_Packet_Indication_Bit_Location - PacketSize;
-						end
-
+					// IF Reached The Last Small Packet in The 32 bits => Start from the Beginning Again
+					// Else Go To The Next Packet
+					Small_Packet_Indication_Bit_Location = (~Done_Element_Delayed  && Small_Packet_Indication_Bit_Location == PacketSize - 1) ? 31 :
+										(~Done_Element_Delayed ) ? Small_Packet_Indication_Bit_Location - PacketSize : Small_Packet_Indication_Bit_Location;
+										
 					// This Bit is used to Store the Last Bit of The First Packet in the Row, We'll Compare this Bit
 					// to all Last Bits of the next Packets till It Changes which means => This is the Last Packet in the Row
 					// Row_Done_Bit_Delayed as  want to change it to the Last Bit of the First Packet in the next Row So I Delayed Row_Done_Bit one Cycle

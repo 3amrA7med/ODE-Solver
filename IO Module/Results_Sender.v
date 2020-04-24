@@ -28,7 +28,7 @@ module Results_Sender #(parameter ADDRESS_WIDTH = 13,
 	// Reg values used to keep size of T and X
     	reg [DATA_WIDTH - 1 :0] num_of_T, num_of_X;
     
-    	reg [ADDRESS_WIDTH :0] RAM_Addr_B, RAM_Addr_A;
+    	reg [ADDRESS_WIDTH-1 :0] RAM_Addr_B, RAM_Addr_A;
     	
 	// This counter is used to initialize sizes of the data that will be sent
     	Counter #(2) Init_Counter (Init_Count, Init_Count_Enable, CLK, RST || ((Init_Count == 2'b11)&&Init_Count_Enable));
@@ -42,8 +42,8 @@ module Results_Sender #(parameter ADDRESS_WIDTH = 13,
     	
     	always @(posedge CLK) begin
 		if(RST) begin
-			num_of_T = 0;
-	    		num_of_X = 0;
+			num_of_T = {DATA_WIDTH {1'b0}};
+	    		num_of_X = {DATA_WIDTH {1'b0}};
 			CPU_Bus = {32 {1'b0}};
 		end
 		else begin
@@ -61,14 +61,21 @@ module Results_Sender #(parameter ADDRESS_WIDTH = 13,
 	// Address handler always block
 	always @(negedge CLK) begin
 		if(RST) begin
-			Start_Bit = 0;
-	    		Done_Sending = 0;
-			RAM_Addr_A = 0;
-			RAM_Addr_B = 0;
+			Start_Bit = 1'b0;
+			T_Count_Enable = 1'b0;
+			_64data_Enable = 1'b0;
+			X_Count_Enable = 1'b0;
+			T_OR_X_Enable = 1'b0;
+			Init_Count_Enable = 1'b0;
+	    		Done_Sending = 1'b0;
+			RAM_Addr_A = {ADDRESS_WIDTH {1'b0}};
+			RAM_Addr_B = {ADDRESS_WIDTH {1'b0}};
+			RAM_Address_A = RAM_Addr_A;
+        		RAM_Address_B = RAM_Addr_B;
 		end
-		else begin
+		else if (Sending_Enable) begin
 			// All the results have been sent to the cpu so stop counters
-			Done_Sending = (Init_Count == 0 && Sending_Enable)?0:
+			Done_Sending = (Init_Count == 0)?0:
 			((T_Count == num_of_T - 1) && (X_Count == num_of_X - 1) && (Partial_Data_Count == 0))? 1 : 0;
 
 			// Start Bit indicate that the initialization of num_of_T and num_of_X Has finished 
@@ -99,7 +106,7 @@ module Results_Sender #(parameter ADDRESS_WIDTH = 13,
         
 			// Calculate address A which is set to be the Number_Of_T_Address constant if we are at the first 2 clock cycles
 			// and initializing the variables otherwise it send T or X depending on T_OR_X value
-        		RAM_Addr_A = (Init_Count == 0 && Sending_Enable) ? NUMBER_OF_T_ADDRESS:
+        		RAM_Addr_A = (Init_Count == 0) ? NUMBER_OF_T_ADDRESS:
         		(T_OR_X == 0) ? STARTING_OF_T_ADDRESS + T_Count:
         		STARTING_OF_X_ADDRESS + X_Count + (num_of_X * T_Count);
 
