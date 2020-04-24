@@ -3,15 +3,17 @@ import random
 from step_utils import dec2bin
 from step_utils import bin2dec
 from modules import adder
+from step_utils import multiplier
+from step_utils import division
 
 N = random.randint(1, 50)                                   # size of vector from 1 to 50
 print("N = ", N)
 
 Hinit = random.random() + random.randint(0, 1)              # initial step from 0 to 2
-Hinit = bin2dec(dec2bin(str(Hinit), 7))                     # approximate to match fixed point representation
-print("Initial h = ", Hinit)
+Hinit = dec2bin(str(Hinit), 7)                               # approximate to match fixed point representation
+print("Initial h = ", bin2dec(Hinit))
 
-L = 2                                                       # tolerance
+L = 2.0                                                       # tolerance
 print("Tolerance = ", L)
 
 X0 = []
@@ -49,4 +51,13 @@ for i in range(N):
 
 print("Error = ", error)
 if error > L:
-    Hnew = (0.9 * pow(Hinit, 2) * L) / error
+    const = dec2bin(str(0.9), 7)                                # let the scale factor be 3, it can be changed
+    Hinit2 = bin(multiplier(Hinit, Hinit)).split('b')[1]        # Hinit squared in binary fixed point representation
+    Hnew = bin(multiplier(const, Hinit2)).split('b')[1]         # Hinit square * 0.9
+    Hnew = bin(multiplier(Hnew, dec2bin(str(L), 7))).split('b')[1]
+    Hnew = bin(division(1, Hnew, dec2bin(str(error), 3)))       # scale factor of error assume 3 can be changed
+
+    print("Hnew in binary = ", Hnew)                            # cause error sometimes depending on error value
+    print("Hnew in decimal = ", bin2dec(Hnew))
+
+    #Hnew = (0.9 * pow(Hinit, 2) * L) / error

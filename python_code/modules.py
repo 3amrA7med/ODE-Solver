@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import numpy as np
 
 def binary_representer(number, scale_factor):
@@ -176,7 +175,7 @@ def adder(first_operand, second_operand, sub, cin):
     output = np.uint16(output | (SF_out << 13))
 
     return output, cout, invalid
-=======
+
 import numpy as np
 
 def binary_representer(number, scale_factor):
@@ -360,4 +359,4 @@ def adder(first_operand, second_operand, sub, cin):
     output = np.uint16(output | (SF_out << 13))
 
     return output, cout, invalid
->>>>>>> 4212a712eb92419ee534cf3a6dd9115f34ed8414
+
