@@ -4,27 +4,6 @@ import decimal
 import json 
 import math
 
-
-data = {
-        "N" : -2.5,
-        "M" : 2,
-        "Count":2,
-        "Mode":1,
-        "H": 0,
-        "Err": 0,
-        "PerMode": 0,
-        "A": [[3,8,25],[25,25,25],[25,25,25]],
-        "B": [[3,5],[25,25],[25,25]],
-        "X0": [45,25,33],
-        "T": [64,46],
-        "U0": [66 , 89],
-        "Us": [[88,88],[99,44]]
-        }
-
-with open('JsonData.json', 'w') as outfile:
-    json.dump(data, outfile)
-
-
 with open('./JsonData.json') as Json_File:
   Json_Data = json.load(Json_File)
  
@@ -73,7 +52,7 @@ def fixedPointBinary(value):
     # Calculate the appropriate Scale Factor up to exact Number of Bits [SCALE_FACTOR_SIZE]
     scaleFactor = min(-decimal.Decimal(str(value)).as_tuple().exponent, (2 ** SCALE_FACTOR_SIZE) - 1)
     # Convert the Number to Fixed Point Representation
-    s34 = float_to_fp(signed = True, n_bits = 16, n_frac = scaleFactor)
+    s34 = float_to_fp(signed = True, n_bits = 14, n_frac = scaleFactor)
     # The Number will occupe exact Number of Bits depends on DATA_WIDTH after removing 
     # the SCALE_FACTOR_SIZE, 2 is used to consider the added "0b" 
     DATA_WIDTH_STRING = str(DATA_WIDTH - SCALE_FACTOR_SIZE + 2)
@@ -87,12 +66,13 @@ def fixedPointBinary(value):
     #Final Representation
     finalValue = ZEROS_STRING + scaleFactorBinaryString + valueBinaryString
     return finalValue
-   
+  
 """
 This Function is used to convert Numbers to Normal Binary Representation 
 Value : the Value to be Converted
 Size : Number of Bits Required 
-""" 
+"""
+
 def toBinary(value, size):
     size = "#0" + str(size + 2) + "b"
     return format(value, size)[2:]
@@ -229,7 +209,9 @@ with open("OriginalElements.txt", "w") as txt_file:
 for element in Elements:
   FinalElementsDecimal.append(int(element,2))
 
-
 print("Original Inputs: ", FinalElementsDecimal) 
 
 print("Packet Size: " , PacketSize)
+
+
+

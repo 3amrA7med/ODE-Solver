@@ -1,3 +1,15 @@
+## Define Random Json function that will generate JSON file with Random Data ##
+proc Random_JSON {} {
+    set output [exec python Random_JSON.py]
+    puts $output
+}
+
+## Define Encode Data function that will take the Input Json File, Encode the Date and Put it in the Packets File ##
+proc Encode_Data {} {
+    set output [exec python Encoder.py]
+    puts $output
+}
+
 ## Add the Waves for Simulation
 delete wave *
 add wave -unsigned *
@@ -16,6 +28,10 @@ force -deposit /Load_Process 1
 run 100
 force -deposit /INT 0
 force -deposit /Load_Process 0
+
+## Call python Scripts to Generate Random JSON file and Encode it to Packets
+Random_JSON
+Encode_Data
 
 ## Read The Packets File To Send Them to the I/O Module on the Chip 
 set packets_file [open Packets.txt]; list
