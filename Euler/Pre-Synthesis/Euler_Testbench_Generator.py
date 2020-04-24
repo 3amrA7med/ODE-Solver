@@ -6,16 +6,16 @@ from python_code.modules import multiplier,adder
 def init():
     out.write('vlog *.v\n')
     out.write('quit -sim\n')
-    out.write('vsim work.Euler\n')
+    out.write('vsim work.System\n')
     out.write('radix -unsigned\n')
     out.write('add wave *\n')
-    out.write('force -freeze CLK 0 1, 1 {50 ps} -r 100\n')
-    out.write('force INT 0\n')
-    out.write('force PROCESS 0\n')
+    out.write('force -freeze System/CLK 0 1, 1 {50 ps} -r 100\n')
+    out.write('force System/INT 0\n')
+    out.write('force System/PROCESS 0\n')
     out.write('run 100 ps\n')
 
 def writeMemory(value,pos):
-        out.write('mem load -filltype value -filldata '+str(value)+' -fillradix unsigned /Euler/Memory/Memory('+str(pos)+')\n')
+        out.write('mem load -filltype value -filldata '+str(value)+' -fillradix unsigned /System/Memory/Memory('+str(pos)+')\n')
 
 def writeMatrix(name, mat, address):
     out.write('\n#Set '+ name +' Matrix\n')
@@ -26,7 +26,7 @@ def writeMatrix(name, mat, address):
             pos+=1
 
 def writeIF(value,test,index):
-    out.write('\nset val [examine RAM_DATA_WR]\n')
+    out.write('\nset val [examine System/RAM_DATA_WR]\n')
     out.write('if {$val != '+str(value)+'} {\n')
     out.write('error "Test'+str(test)+': Failed, XNew['+str(index)+'] != '+str(value)+'"\n')
     out.write('}\n')
@@ -73,8 +73,8 @@ init()
 tc=0
 
 for tc in range(0,testcase):
-    n=np.random.randint(1,51)
-    m=np.random.randint(1,51)
+    n=np.random.randint(1,10)
+    m=np.random.randint(1,10)
     h=np.random.randint(1,1<<16)
     A = np.random.randint(0,1<<16,(n,n)).astype('uint16')
     X = np.random.randint(0,1<<16,(n,1)).astype('uint16')
@@ -97,13 +97,13 @@ for tc in range(0,testcase):
     writeMatrix('B',B,B_ADD)
     writeMatrix('U',U,U_ADD)
 
-    out.write('force INT 1\n')
+    out.write('force System/INT 1\n')
     out.write('run 200 ps\n')
-    out.write('force PROCESS 1\n')
+    out.write('force System/PROCESS 1\n')
     out.write('run 400 ps\n')
-    out.write('force Interpolate_DONE 1\n')
+    out.write('force System/Interpolate_DONE 1\n')
     out.write('run 200 ps\n')
-    out.write('force Interpolate_DONE 0\n')
+    out.write('force System/Interpolate_DONE 0\n')
     out.write('run ' +str(m*n*100-50)+ ' ps\n')
     out.write('run 100 ps\n')
     out.write('run ' +str(n*n*100)+ ' ps\n')
@@ -115,8 +115,8 @@ for tc in range(0,testcase):
 
     out.write('puts "Test '+str(tc)+' Passed!"\n')
     out.write('run 250 ps\n')
-    out.write('force INT 0\n')
-    out.write('force PROCESS 0\n')
+    out.write('force System/INT 0\n')
+    out.write('force System/PROCESS 0\n')
     out.write('run 100 ps\n')
 
 

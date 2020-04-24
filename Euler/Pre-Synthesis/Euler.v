@@ -7,7 +7,11 @@ module Euler
      input CLK,
      output reg DONE,
      input Interpolate_DONE,
-     output reg Interpolate_Enable);
+     output reg Interpolate_Enable,
+     input  [DATA_WIDTH-1:0] RAM_DATA_RD1,RAM_DATA_RD2,
+     output reg [ADDRESS_WIDTH-1:0] RAM_ADD_RD1,RAM_ADD_RD2,RAM_ADD_WR,
+     output reg [DATA_WIDTH-1:0] RAM_DATA_WR,
+     output reg RAM_ENABLE_WR);
 
 parameter   Start=3'b000,
             Init=3'b001,
@@ -20,10 +24,10 @@ parameter   Start=3'b000,
     reg  [2:0] state,next;
     reg  [ADDRESS_WIDTH-1:0] A_ADD,B_ADD,X_ADD,U_ADD,h_ADD,XNew_ADD,n_ADD,m_ADD;
     reg  [ADDRESS_WIDTH-1:0] RES1_ADD,RES2_ADD;
-    reg  [ADDRESS_WIDTH-1:0] RAM_ADD_RD1,RAM_ADD_RD2,RAM_ADD_WR;
-    wire [DATA_WIDTH-1:0] RAM_DATA_RD1,RAM_DATA_RD2;
-    reg  [DATA_WIDTH-1:0] RAM_DATA_WR;
-    reg  RAM_ENABLE_WR;
+    // reg  [ADDRESS_WIDTH-1:0] RAM_ADD_RD1,RAM_ADD_RD2,RAM_ADD_WR;
+    // wire [DATA_WIDTH-1:0] RAM_DATA_RD1,RAM_DATA_RD2;
+    // reg  [DATA_WIDTH-1:0] RAM_DATA_WR;
+    // reg  RAM_ENABLE_WR;
 
     reg  Back, Matrix_Multiplication1_Enable, Matrix_Multiplication2_Enable, Final_Calc_Enable;
     reg  [DATA_WIDTH-1:0] n_val, m_val, h_val;
@@ -33,93 +37,93 @@ parameter   Start=3'b000,
     reg  [1:0] counter;
     wire invalid[8:0], cout[8:0], overflow[1:0];
 
-    initial begin
-    end
+    // initial begin
+    // end
 
-    always@(negedge CLK)    begin
-        state=next;
+    // always@(negedge CLK)    begin
+    //     state=next;
 
-        case(state)
-            Interpolate:    RAM_ADD_RD1=h_ADD;
+    //     case(state)
+    //         Interpolate:    RAM_ADD_RD1=h_ADD;
 
-            Load1:  begin
-                VECTOR_ADD=NEW_VECTOR_ADD;
-                MATRIX_ADD=NEW_MATRIX_ADD;
-                VECTOR_CNT=NEW_VECTOR_CNT;
-                Element_Result=NEW_Element_Result;
-                RAM_ADD_RD1=MATRIX_ADD;
-                RAM_ADD_RD2=VECTOR_ADD;
-                RAM_DATA_WR=Element_Result;
-                RAM_ADD_WR=RESULT_ADD;
+    //         Load1:  begin
+    //             VECTOR_ADD=NEW_VECTOR_ADD;
+    //             MATRIX_ADD=NEW_MATRIX_ADD;
+    //             VECTOR_CNT=NEW_VECTOR_CNT;
+    //             Element_Result=NEW_Element_Result;
+    //             RAM_ADD_RD1=MATRIX_ADD;
+    //             RAM_ADD_RD2=VECTOR_ADD;
+    //             RAM_DATA_WR=Element_Result;
+    //             RAM_ADD_WR=RESULT_ADD;
 
-                RAM_ENABLE_WR=0;
+    //             RAM_ENABLE_WR=0;
 
-                if(VECTOR_CNT==m_val)   begin
-                    RAM_ENABLE_WR=1;
-                    VECTOR_CNT=0;
-                    MATRIX_CNT=NEW_MATRIX_CNT;
-                    VECTOR_ADD=U_ADD;
-                    RAM_ADD_RD2=VECTOR_ADD;
-                    RESULT_ADD=NEW_RESULT_ADD;
-                end
-            end
+    //             if(VECTOR_CNT==m_val)   begin
+    //                 RAM_ENABLE_WR=1;
+    //                 VECTOR_CNT=0;
+    //                 MATRIX_CNT=NEW_MATRIX_CNT;
+    //                 VECTOR_ADD=U_ADD;
+    //                 RAM_ADD_RD2=VECTOR_ADD;
+    //                 RESULT_ADD=NEW_RESULT_ADD;
+    //             end
+    //         end
 
-            Load2:  begin
-                VECTOR_ADD=NEW_VECTOR_ADD;
-                MATRIX_ADD=NEW_MATRIX_ADD;
-                VECTOR_CNT=NEW_VECTOR_CNT;
-                Element_Result=NEW_Element_Result;
-                RAM_ADD_RD1=MATRIX_ADD;
-                RAM_ADD_RD2=VECTOR_ADD;
-                RAM_DATA_WR=Element_Result;
-                RAM_ADD_WR=RESULT_ADD;
+    //         Load2:  begin
+    //             VECTOR_ADD=NEW_VECTOR_ADD;
+    //             MATRIX_ADD=NEW_MATRIX_ADD;
+    //             VECTOR_CNT=NEW_VECTOR_CNT;
+    //             Element_Result=NEW_Element_Result;
+    //             RAM_ADD_RD1=MATRIX_ADD;
+    //             RAM_ADD_RD2=VECTOR_ADD;
+    //             RAM_DATA_WR=Element_Result;
+    //             RAM_ADD_WR=RESULT_ADD;
 
-                RAM_ENABLE_WR=0;
+    //             RAM_ENABLE_WR=0;
 
-                if(VECTOR_CNT==n_val)   begin
-                    RAM_ENABLE_WR=1;
-                    VECTOR_CNT=0;
-                    MATRIX_CNT=NEW_MATRIX_CNT;
-                    VECTOR_ADD=X_ADD;
-                    RAM_ADD_RD2=VECTOR_ADD;
-                    RESULT_ADD=NEW_RESULT_ADD;
-                end
+    //             if(VECTOR_CNT==n_val)   begin
+    //                 RAM_ENABLE_WR=1;
+    //                 VECTOR_CNT=0;
+    //                 MATRIX_CNT=NEW_MATRIX_CNT;
+    //                 VECTOR_ADD=X_ADD;
+    //                 RAM_ADD_RD2=VECTOR_ADD;
+    //                 RESULT_ADD=NEW_RESULT_ADD;
+    //             end
                 
-            end
+    //         end
 
-            Final_Calc: begin
-                RAM_ADD_RD2=MATRIX_ADD;
-                RAM_ADD_WR=RESULT_ADD;
-                RAM_ENABLE_WR=0;
+    //         Final_Calc: begin
+    //             RAM_ADD_RD2=MATRIX_ADD;
+    //             RAM_ADD_WR=RESULT_ADD;
+    //             RAM_ENABLE_WR=0;
 
-                case (counter)
-                    0:  begin
-                        RAM_ADD_RD1=VECTOR2_ADD;
-                        VECTOR_ADD=NEW_VECTOR_ADD;
-                        counter=1;
-                    end 
+    //             case (counter)
+    //                 0:  begin
+    //                     RAM_ADD_RD1=VECTOR2_ADD;
+    //                     VECTOR_ADD=NEW_VECTOR_ADD;
+    //                     counter=1;
+    //                 end 
 
-                    1:  begin
-                        Element_Result=RAM_DATA_RD1;
-                        RAM_ADD_RD1=VECTOR_ADD;
-                        counter=2;
-                    end
+    //                 1:  begin
+    //                     Element_Result=RAM_DATA_RD1;
+    //                     RAM_ADD_RD1=VECTOR_ADD;
+    //                     counter=2;
+    //                 end
 
-                    2:  begin
-                        RAM_ENABLE_WR=1;
-                        RAM_DATA_WR=FINAL_RESULT;
-                        VECTOR2_ADD=NEW_VECTOR2_ADD;
-                        MATRIX_ADD=NEW_MATRIX_ADD;
-                        RESULT_ADD=NEW_RESULT_ADD;
-                        VECTOR_CNT=NEW_VECTOR_CNT;
-                        counter=0;
-                    end
-                    default:    counter=0;
+    //                 2:  begin
+    //                     RAM_ENABLE_WR=1;
+    //                     RAM_DATA_WR=FINAL_RESULT;
+    //                     VECTOR2_ADD=NEW_VECTOR2_ADD;
+    //                     MATRIX_ADD=NEW_MATRIX_ADD;
+    //                     RESULT_ADD=NEW_RESULT_ADD;
+    //                     VECTOR_CNT=NEW_VECTOR_CNT;
+    //                     counter=0;
+    //                 end
+    //                 default:    counter=0;
 
-                endcase
-            end
-        endcase
-    end
+    //             endcase
+    //         end
+    //     endcase
+    // end
 
     always@(PROCESS or INT)    begin
         DONE=0;
@@ -127,6 +131,90 @@ parameter   Start=3'b000,
 
     always@(CLK or state or INT or PROCESS or DONE) begin
 
+        if (~CLK) begin
+            state=next;
+
+            case(state)
+                Interpolate:    RAM_ADD_RD1=h_ADD;
+
+                Load1:  begin
+                    VECTOR_ADD=NEW_VECTOR_ADD;
+                    MATRIX_ADD=NEW_MATRIX_ADD;
+                    VECTOR_CNT=NEW_VECTOR_CNT;
+                    Element_Result=NEW_Element_Result;
+                    RAM_ADD_RD1=MATRIX_ADD;
+                    RAM_ADD_RD2=VECTOR_ADD;
+                    RAM_DATA_WR=Element_Result;
+                    RAM_ADD_WR=RESULT_ADD;
+
+                    RAM_ENABLE_WR=0;
+
+                    if(VECTOR_CNT==m_val)   begin
+                        RAM_ENABLE_WR=1;
+                        VECTOR_CNT=0;
+                        MATRIX_CNT=NEW_MATRIX_CNT;
+                        VECTOR_ADD=U_ADD;
+                        RAM_ADD_RD2=VECTOR_ADD;
+                        RESULT_ADD=NEW_RESULT_ADD;
+                    end
+                end
+
+                Load2:  begin
+                    VECTOR_ADD=NEW_VECTOR_ADD;
+                    MATRIX_ADD=NEW_MATRIX_ADD;
+                    VECTOR_CNT=NEW_VECTOR_CNT;
+                    Element_Result=NEW_Element_Result;
+                    RAM_ADD_RD1=MATRIX_ADD;
+                    RAM_ADD_RD2=VECTOR_ADD;
+                    RAM_DATA_WR=Element_Result;
+                    RAM_ADD_WR=RESULT_ADD;
+
+                    RAM_ENABLE_WR=0;
+
+                    if(VECTOR_CNT==n_val)   begin
+                        RAM_ENABLE_WR=1;
+                        VECTOR_CNT=0;
+                        MATRIX_CNT=NEW_MATRIX_CNT;
+                        VECTOR_ADD=X_ADD;
+                        RAM_ADD_RD2=VECTOR_ADD;
+                        RESULT_ADD=NEW_RESULT_ADD;
+                    end
+                    
+                end
+
+                Final_Calc: begin
+                    RAM_ADD_RD2=MATRIX_ADD;
+                    RAM_ADD_WR=RESULT_ADD;
+                    RAM_ENABLE_WR=0;
+
+                    case (counter)
+                        0:  begin
+                            RAM_ADD_RD1=VECTOR2_ADD;
+                            VECTOR_ADD=NEW_VECTOR_ADD;
+                            counter=1;
+                        end 
+
+                        1:  begin
+                            Element_Result=RAM_DATA_RD1;
+                            RAM_ADD_RD1=VECTOR_ADD;
+                            counter=2;
+                        end
+
+                        2:  begin
+                            RAM_ENABLE_WR=1;
+                            RAM_DATA_WR=FINAL_RESULT;
+                            VECTOR2_ADD=NEW_VECTOR2_ADD;
+                            MATRIX_ADD=NEW_MATRIX_ADD;
+                            RESULT_ADD=NEW_RESULT_ADD;
+                            VECTOR_CNT=NEW_VECTOR_CNT;
+                            counter=0;
+                        end
+                        default:    counter=0;
+
+                    endcase
+                end
+            endcase
+        end
         case(state)
             Start: begin
                 if(Back)    begin
@@ -268,8 +356,8 @@ parameter   Start=3'b000,
 
     end
 
-    RAM #(ADDRESS_WIDTH,DATA_WIDTH,2**ADDRESS_WIDTH) Memory(CLK,1'b0,RAM_ENABLE_WR,RAM_ADD_RD1,RAM_ADD_RD2,RAM_ADD_WR,
-    RAM_DATA_RD1,RAM_DATA_RD2,RAM_DATA_WR);
+    // RAM #(ADDRESS_WIDTH,DATA_WIDTH,2**ADDRESS_WIDTH) Memory(CLK,1'b0,RAM_ENABLE_WR,RAM_ADD_RD1,RAM_ADD_RD2,RAM_ADD_WR,
+    // RAM_DATA_RD1,RAM_DATA_RD2,RAM_DATA_WR);
 
     
 /**/

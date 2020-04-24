@@ -2,14 +2,14 @@ vlog *.v
 
 quit -sim
 
-vsim work.System
+vsim work.Euler
 
 radix -unsigned
 
 add wave *
 
 for {set i 0} {$i < 3500} {incr i} {
-    mem load -filltype value -filldata $i -fillradix unsigned /System/Memory/Memory($i)
+    mem load -filltype value -filldata $i -fillradix unsigned /Euler/Memory/Memory($i)
 }
 
 force -freeze CLK 0 1, 1 {50 ps} -r 100
