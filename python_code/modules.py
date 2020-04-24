@@ -61,6 +61,7 @@ def dec2bin(number,accuracy):
     scale_factor = bin(int(accuracy))[2:].zfill(3)
     print("input representation is :", scale_factor+binary_rep)
 
+<<<<<<< HEAD
 
 # Function multiplier that simulates module multiplier hardware
 def multiplier(first_operand, second_operand):
@@ -240,6 +241,8 @@ def dec2bin(number,accuracy):
     scale_factor = bin(int(accuracy))[2:].zfill(3)
     print("input representation is :", scale_factor+binary_rep)
 
+=======
+>>>>>>> c7cb92c578b18092f622308d1624dfd10efe2354
 # Function multiplier that simulates module multiplier hardware
 def multiplier(first_operand, second_operand):
     input_1 = np.int16(int(first_operand, base=2))
