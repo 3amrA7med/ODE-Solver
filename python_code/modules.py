@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+=======
 import numpy as np
 
 def binary_representer(number, scale_factor):
@@ -60,6 +61,7 @@ def dec2bin(number,accuracy):
     scale_factor = bin(int(accuracy))[2:].zfill(3)
     print("input representation is :", scale_factor+binary_rep)
 
+<<<<<<< HEAD
 
 # Function multiplier that simulates module multiplier hardware
 def multiplier(first_operand, second_operand):
@@ -176,7 +178,8 @@ def adder(first_operand, second_operand, sub, cin):
     output = np.uint16(output | (SF_out << 13))
 
     return output, cout, invalid
-=======
+
+>>>>>>> 4abf8c273794d9d204a683f0c0dec87c4ca92dd4
 import numpy as np
 
 def binary_representer(number, scale_factor):
@@ -238,6 +241,8 @@ def dec2bin(number,accuracy):
     scale_factor = bin(int(accuracy))[2:].zfill(3)
     print("input representation is :", scale_factor+binary_rep)
 
+=======
+>>>>>>> c7cb92c578b18092f622308d1624dfd10efe2354
 # Function multiplier that simulates module multiplier hardware
 def multiplier(first_operand, second_operand):
     input_1 = np.int16(int(first_operand, base=2))
@@ -360,4 +365,7 @@ def adder(first_operand, second_operand, sub, cin):
     output = np.uint16(output | (SF_out << 13))
 
     return output, cout, invalid
->>>>>>> 4212a712eb92419ee534cf3a6dd9115f34ed8414
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4abf8c273794d9d204a683f0c0dec87c4ca92dd4

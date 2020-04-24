@@ -33,7 +33,7 @@ def division(reset, dividend, divisor):
     else :
         num_2 = num_2 | 0x0000  # sign extend
         # print("divisor has extended witn the sign"+str(bin(num_2)))      
-    sign = np.logical_xor( (input_2 >> 12) , (input_1 >> 12) )
+    sign = (input_2 >> 12)^(input_1 >> 12)
     # print ("sign of the result will be = "+str(sign))
 
     # getting the 2's complement of the negative number to work on a positive ones
@@ -66,7 +66,7 @@ def division(reset, dividend, divisor):
         ready = 1
         divideByZero = 1
         res = 0
-        print (" you want to divide by zero ")
+        # print (" you want to divide by zero ")
         return overFlow,res,divideByZero,ready
 
     # print ("final value for the dividend to work => "+str(bin(num_1)))
@@ -83,4 +83,4 @@ def division(reset, dividend, divisor):
     ready = 1
     return overFlow,res,divideByZero,ready
 
-division(1,"0000000000000111","0000000000000000")
+division(1,"1110010101100100","0000000000000100")
