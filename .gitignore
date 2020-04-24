@@ -9,6 +9,7 @@ Euler/*/transcript
 python-code/binary.txt
 results.txt
 python-code/venv/
+post-synthesis-results-sender/
 
 # Verilog extensions
 *.wlf
