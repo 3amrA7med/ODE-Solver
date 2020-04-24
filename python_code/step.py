@@ -10,10 +10,11 @@ N = random.randint(1, 50)                                   # size of vector fro
 print("N = ", N)
 
 Hinit = random.random() + random.randint(0, 1)              # initial step from 0 to 2
-Hinit = dec2bin(str(Hinit), 7)                               # approximate to match fixed point representation
+# Hinit = 2.0
+Hinit = dec2bin(str(Hinit), 0)                               # approximate to match fixed point representation
 print("Initial h = ", bin2dec(Hinit))
 
-L = 2.0                                                       # tolerance
+L = 3.0                                                       # tolerance
 print("Tolerance = ", L)
 
 X0 = []
@@ -31,6 +32,9 @@ for i in range(N):
     strBinNum = dec2bin(str(num), sf)                  # 16 bit binary string
     X1.append(strBinNum)
 
+
+# X0 = ["0000000000000110", "0000000000000111"]
+# X1 = ["0000000000000100", "0000000000000101"]
 print("X0 in bin : ", X0)
 
 print("X0 in dec : ")
@@ -40,7 +44,7 @@ for i in range(N):
 print("X1 in bin : ", X1)
 
 print("X1 in dec : ")
-for i in range(N):
+for i in range(2):
     print(bin2dec(X1[i]))
 
 error = "0000000000000000"
@@ -57,13 +61,25 @@ print("Error in binary = ", error)
 print("Error in decimal = ", bin2dec(error))
 
 if bin2dec(error) > L:
-    const = dec2bin(str(0.9), 7)                                # let the scale factor be 3, it can be changed
-    Hinit2 = bin(multiplier(Hinit, Hinit)).split('b')[1]        # Hinit squared in binary fixed point representation
-    Hnew = bin(multiplier(const, Hinit2)).split('b')[1]         # Hinit square * 0.9
-    Hnew = bin(multiplier(Hnew, dec2bin(str(L), 3))).split('b')[1]
-    Hnew = bin(division(1, Hnew, error))                     # scale factor of error assume 3 can be changed
+    const = dec2bin(str(0.9), 7)
+    #print("0.9 = ", const)
+    #print("0.9 = ", bin2dec(const))
 
-    print("Hnew in binary = ", Hnew)                            # cause error sometimes depending on error value
+    Hnew = bin(multiplier(const, dec2bin(str(L), 0))).split('b')[1]
+    #print(Hnew)
+    #print(bin2dec(Hnew))
+
+    Hnew = bin(multiplier(Hnew, Hinit)).split('b')[1]
+    #print("h square = ", Hnew)
+    #print("h square = ", bin2dec(Hnew))
+
+    Hnew = bin(multiplier(Hnew, Hinit)).split('b')[1]
+    #print(Hnew)
+    #print(bin2dec(Hnew))
+
+    Hnew = bin(division(0, Hnew, error))
+
+    print("Hnew in binary = ", Hnew)
     print("Hnew in decimal = ", bin2dec(Hnew))
 
     #Hnew = (0.9 * pow(Hinit, 2) * L) / error
