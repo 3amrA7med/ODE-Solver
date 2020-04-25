@@ -289,3 +289,98 @@ def adder(first_operand, second_operand, sub, cin):
     return output
 
 
+def binaryToDecimal(binary):
+    binary1 = binary
+    decimal, i, n = 0, 0, 0
+    while (binary != 0):
+        dec = binary % 10
+        decimal = decimal + dec * pow(2, i)
+        binary = binary // 10
+        i += 1
+    return decimal
+
+
+def create_testBench(X0, X1, N, Hnew, L, Hinit, error):
+    File = open('StepTestBench.do', 'w')
+    print('# Testbench for Step module \n', file=File)
+    print('vsim work.Coordinator_Module \n', file=File)
+    print('radix -unsigned \n', file=File)
+    print('add wave * \n', file=File)
+    print('set n %s \n' % (str(N)), file=File)
+    print('set m %s \n' % (str(N + 1)), file=File)
+    print('set mode %s \n' % (str(1)), file=File)
+    print('set l %s \n' % (str(int(L))), file=File)
+    print('set h_temp %s \n' % (str(binaryToDecimal(int(Hinit)))), file=File)
+    print('set h_init %s \n' % (str(binaryToDecimal(int(Hinit)))), file=File)
+    print('set x_process %s \n' % (str(6)), file=File)
+    print('set x_init %s \n' % (str(56)), file=File)
+    print('set x_n+1_0 %s \n' % (str(106)), file=File)
+    print('set cur 0 \n', file=File)
+    print(' \n\n\n', file=File)
+    print('# Answers\n', file=File)
+    print('set Error %s \n' % (str(binaryToDecimal(int(error)))), file=File)
+    print('set hnew %s \n' % (str(binaryToDecimal(int(Hnew)))), file=File)
+    print(' \n\n\n', file=File)
+    print('force -freeze sim:/Coordinator_Module/Euler_End 0 0 \n', file=File)
+    print('force -freeze sim:/Coordinator_Module/CLK 1 0, 0 {50 ps} -r 100 \n', file=File)
+    print('force -freeze sim:/Coordinator_Module/RST 1 0 \n', file=File)
+    print('run 250 ps \n', file=File)
+    print('force -freeze sim:/Coordinator_Module/RST St0 0 \n', file=File)
+    print(' \n\n\n', file=File)
+
+    print('mem load -filltype value -filldata $n -fillradix unsigned /Coordinator_Module/Memory/Memory(0) \n',
+          file=File)
+    print('mem load -filltype value -filldata $m -fillradix unsigned /Coordinator_Module/Memory/Memory(1) \n',
+          file=File)
+    print('mem load -filltype value -filldata $mode -fillradix unsigned /Coordinator_Module/Memory/Memory(2) \n',
+          file=File)
+    print('mem load -filltype value -filldata $l -fillradix unsigned /Coordinator_Module/Memory/Memory(3) \n',
+          file=File)
+    print('mem load -filltype value -filldata $h_temp -fillradix unsigned /Coordinator_Module/Memory/Memory(4) \n',
+          file=File)
+    print('mem load -filltype value -filldata $h_init -fillradix unsigned /Coordinator_Module/Memory/Memory(5) \n',
+          file=File)
+
+    for i in range(N):
+        print(
+            'mem load -filltype value -filldata { %s } -fillradix unsigned /Coordinator_Module/Memory/Memory([expr $cur + $x_process]) \n'
+            % (str(binaryToDecimal(int(X0[i])))), file=File)
+        print(
+            'mem load -filltype value -filldata { %s } -fillradix unsigned /Coordinator_Module/Memory/Memory([expr $cur + $x_init]) \n'
+            % (str(binaryToDecimal(int(X1[i])))), file=File)
+        print('incr cur; \n', file=File)
+
+    print('run 200 ps \n', file=File)
+    print('force -freeze sim:/Coordinator_Module/Step/Euler_End 1 0 \n', file=File)
+    print('run 100 ps \n', file=File)
+    print('force -freeze sim:/Coordinator_Module/Step/Euler_End 0 0 \n', file=File)
+    print('run 200 ps \n', file=File)
+    print('for {set i 0} {$i < [expr $n]} {incr i} { \n', file=File)
+    print('run 500 ps } \n', file=File)
+    print('run 2 ns \n', file=File)
+    print('run 200 ps \n', file=File)
+    print('force -freeze sim:/Coordinator_Module/Step/Euler_End 1 0 \n', file=File)
+    print('run 100 ps \n', file=File)
+    print('force -freeze sim:/Coordinator_Module/Step/Euler_End 0 0 \n', file=File)
+    print('run 200 ps \n', file=File)
+    print('force -freeze sim:/Coordinator_Module/Step/Euler_End 1 0 \n', file=File)
+    print('run 100 ps \n', file=File)
+    print('force -freeze sim:/Coordinator_Module/Step/Euler_End 0 0 \n', file=File)
+    print('run 200 ps \n', file=File)
+    print('for {set i 0} {$i < [expr $n]} {incr i} { \n', file=File)
+    print('run 500 ps } \n', file=File)
+    print('run 100 ps \n', file=File)
+    print('run 3 ns \n', file=File)
+    print('#set val [examine /Coordinator_Module/Step/Errortemp ] \n', file=File)
+    print('#if {$val != $Error} { \n', file=File)
+    print('#} \n', file=File)
+    print('set val [examine /Coordinator_Module/Memory/Memory(4) ] \n', file=File)
+    print('if {$val != $hnew} { \n', file=File)
+    print('error "Test2: Failed, h_temp != $hnew } \n', file=File)
+    print('set val [examine /Coordinator_Module/Memory/Memory(5) ] \n', file=File)
+    print('if {$val != $hnew} { \n', file=File)
+    print('error "Test3: Failed, h_init != $hnew } \n', file=File)
+    print('puts "All tests Passed Successfully!"; \n', file=File)
+
+    File.close()
+
