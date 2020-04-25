@@ -1,4 +1,5 @@
 import numpy as np
+from step_utils import bin2dec
 
 def binary_representer(number, scale_factor):
     whole, dec = str(number).split(".") 
@@ -103,6 +104,9 @@ def adder(first_operand, second_operand, sub, cin):
     input_2 = np.uint16(int(second_operand, base=2))
     sub = int(sub)
     cin = int(cin)
+
+    # print("First Operand in decimal = ", bin2dec(first_operand))
+    # print("Second Operand in decimal = ", bin2dec(second_operand))
 
     output = np.uint16(0)
     invalid = 0
