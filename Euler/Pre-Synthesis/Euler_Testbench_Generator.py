@@ -8,11 +8,14 @@ def init():
     out.write('quit -sim\n')
     out.write('vsim work.System\n')
     out.write('radix -unsigned\n')
-    out.write('add wave *\n')
+    writeMemory(0,0)
+    out.write('add wave -r /*\n')
     out.write('force -freeze System/CLK 0 1, 1 {50 ps} -r 100\n')
     out.write('force System/INT 0\n')
-    out.write('force System/PROCESS 0\n')
+    out.write('force System/RST 1\n')
+    out.write('force System/Interpolate_DONE 0\n')
     out.write('run 100 ps\n')
+    out.write('force System/RST 0\n')
 
 def writeMemory(value,pos):
         out.write('mem load -filltype value -filldata '+str(value)+' -fillradix unsigned /System/Memory/Memory('+str(pos)+')\n')
@@ -24,6 +27,8 @@ def writeMatrix(name, mat, address):
         for val in row:
             writeMemory(val,address+pos)
             pos+=1
+    writeMemory(0,address+pos)
+    
 
 def writeIF(value,test,index):
     out.write('\nset val [examine System/RAM_DATA_WR]\n')
@@ -60,11 +65,11 @@ def Final(Res1,Res2,h_val,X_vec):
 
 n_ADD=0
 m_ADD=1
-h_ADD=4
 A_ADD=7
 B_ADD=2507
 X_ADD=5207
 U_ADD=5257
+h_ADD=5457
 out=open('stress_testbench.do','w')
 
 testcase=int(sys.argv[1])  #Number of testcases
@@ -73,13 +78,13 @@ init()
 tc=0
 
 for tc in range(0,testcase):
-    n=np.random.randint(1,10)
-    m=np.random.randint(1,10)
-    h=np.random.randint(1,1<<16)
-    A = np.random.randint(0,1<<16,(n,n)).astype('uint16')
-    X = np.random.randint(0,1<<16,(n,1)).astype('uint16')
-    B = np.random.randint(0,1<<16,(n,m)).astype('uint16')
-    U = np.random.randint(0,1<<16,(m,1)).astype('uint16')
+    n=np.random.randint(1,5)
+    m=np.random.randint(1,5)
+    h=np.random.randint(1,10)
+    A = np.random.randint(0,10,(n,n)).astype('uint16')
+    X = np.random.randint(0,10,(n,1)).astype('uint16')
+    B = np.random.randint(0,10,(n,m)).astype('uint16')
+    U = np.random.randint(0,10,(m,1)).astype('uint16')
 
     # R1=np.dot(B,U)
     # R2=np.dot(A,X)
@@ -98,8 +103,6 @@ for tc in range(0,testcase):
     writeMatrix('U',U,U_ADD)
 
     out.write('force System/INT 1\n')
-    out.write('run 200 ps\n')
-    out.write('force System/PROCESS 1\n')
     out.write('run 400 ps\n')
     out.write('force System/Interpolate_DONE 1\n')
     out.write('run 200 ps\n')
@@ -116,7 +119,6 @@ for tc in range(0,testcase):
     out.write('puts "Test '+str(tc)+' Passed!"\n')
     out.write('run 250 ps\n')
     out.write('force System/INT 0\n')
-    out.write('force System/PROCESS 0\n')
     out.write('run 100 ps\n')
 
 
