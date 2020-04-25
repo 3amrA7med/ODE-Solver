@@ -1,0 +1,64 @@
+Report Instance Areas: 
+-----+--------------------+-----------------------------------+-----+---------
+     |Instance            |Module                             |Cells|Cell Area
+-----+--------------------+-----------------------------------+-----+---------
+1    |top                 |                                   | 5298|     7525
+2    |  MATRIX_CNT_adder  |add_sub_cla__0_1377__GU            |   27|       31
+3    |    cs0             |carry_lookahead_adder_20bit__0_1376|   27|       31
+4    |      cla0          |carry_lookahead_adder_4bit__6_8    |    8|        8
+5    |      cla1          |carry_lookahead_adder_4bit__6_17   |    9|       10
+6    |      cla2          |carry_lookahead_adder_4bit__6_26   |    9|       10
+7    |      cla3          |carry_lookahead_adder_4bit__6_35   |    1|        2
+8    |  VECTOR_CNT_adder  |add_sub_cla__0_1321__GU            |   27|       31
+9    |    cs0             |carry_lookahead_adder_20bit__0_1320|   27|       31
+10   |      cla0          |carry_lookahead_adder_4bit__4_8    |    8|        8
+11   |      cla1          |carry_lookahead_adder_4bit__4_17   |    9|       10
+12   |      cla2          |carry_lookahead_adder_4bit__4_26   |    9|       10
+13   |      cla3          |carry_lookahead_adder_4bit__4_35   |    1|        2
+14   |  MATRIX_ADD_adder  |add_sub_cla__GU                    |   27|       31
+15   |    cs0             |carry_lookahead_adder_20bit        |   27|       31
+16   |      cla0          |carry_lookahead_adder_4bit__9_8    |    8|        8
+17   |      cla1          |carry_lookahead_adder_4bit__9_17   |    9|       10
+18   |      cla2          |carry_lookahead_adder_4bit__9_26   |    9|       10
+19   |      cla3          |carry_lookahead_adder_4bit__9_35   |    1|        2
+20   |  VECTOR2_ADD_adder |add_sub_cla__0_1433__GU            |   27|       31
+21   |    cs0             |carry_lookahead_adder_20bit__0_1432|   27|       31
+22   |      cla0          |carry_lookahead_adder_4bit__8_8    |    8|        8
+23   |      cla1          |carry_lookahead_adder_4bit__8_17   |    9|       10
+24   |      cla2          |carry_lookahead_adder_4bit__8_26   |    9|       10
+25   |      cla3          |carry_lookahead_adder_4bit__8_35   |    1|        2
+26   |  VECTOR_ADD_adder  |add_sub_cla__0_1405__GU            |   27|       31
+27   |    cs0             |carry_lookahead_adder_20bit__0_1404|   27|       31
+28   |      cla0          |carry_lookahead_adder_4bit__7_8    |    8|        8
+29   |      cla1          |carry_lookahead_adder_4bit__7_17   |    9|       10
+30   |      cla2          |carry_lookahead_adder_4bit__7_26   |    9|       10
+31   |      cla3          |carry_lookahead_adder_4bit__7_35   |    1|        2
+32   |  RESULT_ADD_adder  |add_sub_cla__0_1349__GU            |   27|       31
+33   |    cs0             |carry_lookahead_adder_20bit__0_1348|   27|       31
+34   |      cla0          |carry_lookahead_adder_4bit__5_8    |    8|        8
+35   |      cla1          |carry_lookahead_adder_4bit__5_17   |    9|       10
+36   |      cla2          |carry_lookahead_adder_4bit__5_26   |    9|       10
+37   |      cla3          |carry_lookahead_adder_4bit__5_35   |    1|        2
+38   |  h_MUL             |multiplier_16bit__0_1434           | 1575|     2097
+39   |    mult            |booth_16bit_multiplier             | 1474|     1982
+40   |  MUL               |multiplier_16bit                   | 1575|     2097
+41   |    mult            |booth_16bit_multiplier             | 1474|     1982
+42   |  VEC1_VEC2_adder   |add_sub_cla__3_99                  |  250|      253
+43   |    cs0             |carry_lookahead_adder_20bit__3_98  |   68|       72
+44   |      cla0          |carry_lookahead_adder_4bit__3_97   |   26|       25
+45   |      cla1          |carry_lookahead_adder_4bit__3_88   |   20|       22
+46   |      cla2          |carry_lookahead_adder_4bit__3_79   |   20|       22
+47   |      cla3          |carry_lookahead_adder_4bit__3_70   |    2|        3
+48   |  FINAL_RESULT_adder|add_sub_cla__3_163                 |  223|      239
+49   |    cs0             |carry_lookahead_adder_20bit__3_162 |   57|       66
+50   |      cla0          |carry_lookahead_adder_4bit__3_161  |   17|       20
+51   |      cla1          |carry_lookahead_adder_4bit__3_152  |   19|       21
+52   |      cla2          |carry_lookahead_adder_4bit__3_143  |   19|       22
+53   |      cla3          |carry_lookahead_adder_4bit__3_134  |    2|        3
+54   |  ELEMENT_adder     |add_sub_cla__0_1293                |  256|      257
+55   |    cs0             |carry_lookahead_adder_20bit__0_1292|   66|       71
+56   |      cla0          |carry_lookahead_adder_4bit__3_8    |   17|       20
+57   |      cla1          |carry_lookahead_adder_4bit__3_17   |   21|       23
+58   |      cla2          |carry_lookahead_adder_4bit__3_26   |   26|       25
+59   |      cla3          |carry_lookahead_adder_4bit__3_35   |    2|        3
+-----+--------------------+-----------------------------------+-----+---------
