@@ -10,12 +10,12 @@ module Step_Module #(parameter ADDRESS_WIDTH = 13,
                    output reg [DATA_WIDTH - 1 :0] RAM_Data_WR,
                    output reg [ADDRESS_WIDTH - 1 :0] RAM_Address_WR,  //  Ram Coordinator Inputs Outputs
                    output reg Euler_Enable,
-                   input Euler_End // Euler Coordinator Inputs Outputs
-                   );
+                   input Euler_End , // Euler Coordinator Inputs Outputs
+                   output reg Error_Flag);
 // Adder module
 
 
-                   reg adder_enable1 ;
+
                    reg sub1 ;
                    reg [15:0] in11 ;
                    reg [15:0] in21 ;
@@ -23,9 +23,9 @@ module Step_Module #(parameter ADDRESS_WIDTH = 13,
                    reg cin1 ;
                    wire cout1;
                    wire invalid1;
-                   add_sub_cla adder1(adder_enable1, sub1, in11, in21, cin1, adder_out1, cout1, invalid1);
+                   add_sub_cla adder1( sub1, in11, in21, cin1, adder_out1, cout1, invalid1);
 
-                   reg adder_enable2 ;
+
                    reg sub2 ;
                    reg [15:0] in12 ;
                    reg [15:0] in22 ;
@@ -35,7 +35,7 @@ module Step_Module #(parameter ADDRESS_WIDTH = 13,
                    wire  invalid2;
 
 
-                   add_sub_cla adder2(adder_enable2, sub2, in12, in22, cin2, adder_out2, cout2, invalid2);
+                   add_sub_cla adder2( sub2, in12, in22, cin2, adder_out2, cout2, invalid2);
 
 
 
@@ -65,15 +65,17 @@ reg [63:0] currentT;
 
 reg [63:0] N;
 reg [63:0] M;
-reg [63:0] htemp,Errortemp, hnew;
-reg [1:0] flag;
-reg division_operation ;
+reg [63:0] htemp;
+reg [63:0] Errortemp;
+reg [63:0] hnew;
+reg [63:0] Temp  ;
 
 //reg [63:0] tolerance;
 reg [12:0] count ;
-reg [63:0] Temp  ;
 reg [2:0] hstate ;
+reg [1:0] flag;
 
+reg division_operation ;
 
 reg [ADDRESS_WIDTH-1:0] N_ADD;
 reg [ADDRESS_WIDTH-1:0] M_ADD	;
@@ -110,115 +112,94 @@ reg[3:0]  Division_State  ;
 
 
 
-/*Step_Error # (RAM_ADDRESS_WIDTH, RAM_DATA_WIDTH) StepError
-(RST, CLK, Step_Memory_WR_Enable, RAM_Data_RD_A, RAM_Data_RD_B,
-RAM_Address_RD_A, RAM_Address_RD_B, RAM_Data_WR, RAM_Address_WR, ErrorEnd, Error_Enable );*/
-
-
-always @ (*) begin
-  if(State == Start & NextState == Euler)begin
-  //$display("adadadadadad     ADD A = ", RAM_Data_RD_A , "ADD B = ",RAM_Data_RD_B);
-   N = RAM_Data_RD_A;
-   M = RAM_Data_RD_B;         // Start Init Read N , M from Ram and save them in N , M
-  end
-  if(State == Step & NextState == hstate_zero)
-  htemp = RAM_Data_RD_A;
-
-end
-
-always @(posedge CLK) begin
-//$display("RST" , RST);
-   if(RST)begin
-
-      // States
-
-       Start = 4'd_0;
-       Euler = 4'd_1;
-       Fixed = 4'd_2;
-       Step = 4'd_3;
-       hstate_zero = 4'd_4;
-       Read = 4'd_5;
-       Write1 = 4'd_6;
-       Write2 = 4'd_7;
-      // for Error calclation
-
-       Read2 = 4'd_8;
-       Process_error = 4'd_9;
-       Error = 4'd_10;
-       Compare = 4'd_11;
-       Continue = 4'd_12;
-       Check_Result_Time = 4'd_13;
-       helper = 4'd_14;
-       Division_State = 4'd_15 ;
-      // modules Initializtion
-
-      adder_enable1 = 1;
-      sub1 = 0;
-      in11 = 0 ;
-      in21 = 0 ;
-      cin1 = 0;
-
-       adder_enable2 = 1;
-       sub2 = 0;
-       in12 = 0 ;
-       in22 = 0 ;
-       cin2 = 0;
-
-        first_operand = 0 ;
-        second_operand = 0;
-        mult_enable = 1;
-
-        reset = 1;
-        dividend  = 1;
-        divisor = 1;
-
-        Step_Memory_WR_Enable = 0;
-        RAM_Address_RD_A = 0;
-        RAM_Address_RD_B = 0;
-        RAM_Address_WR = 0;
-        RAM_Data_WR = 0;
-        Euler_Enable = 0 ;
-
-
-      // Address Initializtion
-
-      N_ADD	= 0;
-      M_ADD	= 1;
-      mode_ADD= 2;
-      X_process_ADD	= 6;
-      X_init_ADD	= 56;
-      Xn0_ADD	= 106;
-      Htemp_ADD = 4;
-      Hinit_ADD = 5;
-
-      // reg Initializtion
-
-      resultT = 64'd_2 ;
-      currentT = 64'd_1;
-      N = 0;
-      M = 0;
-      htemp = 0 ;
-      Errortemp = 0;
-      hnew = 0;
-      flag = 0;
-      division_operation = 0;
-
-      //reg [63:0] tolerance;
-      count = 13'd_0;
-      Temp  = 64'd_0;
-      hstate = 2'd_0;
-
-   State = Start;
-   NextState  = Start;
-
-   end
-end
-
 
 
 always @(posedge CLK) begin
 //$display("RST" , RST);
-   if(~RST)begin
+if(RST)begin
+
+   // States
+
+    Start = 4'd_0;
+    Euler = 4'd_1;
+    Fixed = 4'd_2;
+    Step = 4'd_3;
+    hstate_zero = 4'd_4;
+    Read = 4'd_5;
+    Write1 = 4'd_6;
+    Write2 = 4'd_7;
+   // for Error calclation
+
+    Read2 = 4'd_8;
+    Process_error = 4'd_9;
+    Error = 4'd_10;
+    Compare = 4'd_11;
+    Continue = 4'd_12;
+    Check_Result_Time = 4'd_13;
+    helper = 4'd_14;
+    Division_State = 4'd_15 ;
+   // modules Initializtion
+
+
+   sub1 = 0;
+   in11 = 0 ;
+   in21 = 0 ;
+   cin1 = 0;
+
+
+    sub2 = 0;
+    in12 = 0 ;
+    in22 = 0 ;
+    cin2 = 0;
+
+     first_operand = 0 ;
+     second_operand = 0;
+     mult_enable = 1;
+
+     reset = 1;
+     dividend  = 1;
+     divisor = 1;
+
+     Step_Memory_WR_Enable = 0;
+     RAM_Address_RD_A = 0;
+     RAM_Address_RD_B = 1;
+     RAM_Address_WR = 0;
+     RAM_Data_WR = 0;
+     Euler_Enable = 0 ;
+
+
+   // Address Initializtion
+
+   N_ADD	= 0;
+   M_ADD	= 1;
+   mode_ADD= 2;
+   X_process_ADD	= 6;
+   X_init_ADD	= 56;
+   Xn0_ADD	= 106;
+   Htemp_ADD = 4;
+   Hinit_ADD = 5;
+
+   // reg Initializtion
+   Error_Flag = 0;
+   resultT = 64'd_2 ;
+   currentT = 64'd_1;
+   N = 64'd_0;
+   M = 64'd_0;
+   htemp = 64'd_0;
+   Errortemp = 64'd_0;
+   hnew = 64'd_0;
+   flag = 2'd_0;
+   division_operation = 0;
+
+   //reg [63:0] tolerance;
+   count = 13'd_0;
+   Temp  = 64'd_0;
+   hstate = 3'd_0;
+   State = 4'd_0;
+   NextState  = 4'd_0;
+
+end
+  else begin
 
 case(NextState)
 
@@ -227,8 +208,8 @@ case(NextState)
 Start: begin
 State = Start;
 //$display("state Start");
-RAM_Address_RD_A = N_ADD; // to read N
-RAM_Address_RD_B = M_ADD;  // to read M
+N = RAM_Data_RD_A;
+M = RAM_Data_RD_B;         // Start Init Read N , M from Ram and save them in N , M
 NextState = Euler;
 end
 
@@ -315,7 +296,7 @@ NextState = hstate_zero;
 reset = 1;
 end
 end
-if(div_overflow | divideByZero)
+if(div_overflow | divideByZero | mult_overflow)
 NextState = Error;
 
 
@@ -343,19 +324,19 @@ end
 end
 
 else begin
+
+if (Temp == 64'd_0)
+htemp = RAM_Data_RD_A;
+
 Step_Memory_WR_Enable = 1'b0;
 //Temp = Temp + 64'd_1;
 Temp[15:0] = adder_out1;
-//$display("adder out",adder_out1);
-//$display("temp",Temp);
 
-// set address of xprocess and xinit into 2adder
 in11= X_process_ADD;  // address of xprocess
 in21= count;
 
 in12 = X_init_ADD;    // address of xinit
 in22 = count;
-//
 NextState = Read;
 end
 end
@@ -494,12 +475,12 @@ hnew = 0;
 NextState = Compare;
 end
 else begin
+if (invalid1 | invalid2)
+NextState = Error;
+else
 RAM_Address_RD_A = adder_out1[12:0];
 RAM_Address_RD_B = adder_out2[12:0];
-//$display("ADD A = ", RAM_Address_RD_A );
-//$display("DAta at ADD A",RAM_Data_RD_A);
-//$display("ADD B = ", RAM_Address_RD_B );
-//$display("DAta at ADD B",RAM_Data_RD_B);
+
 NextState = Process_error;
 
 // inc count ;
@@ -599,20 +580,20 @@ end
 ////////////////////////////////////////////***************** Error *****************\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 Error: begin
 State = Error;
-if(div_overflow | divideByZero | mult_overflow)begin
-//$display("Error Happened");
+if(div_overflow | divideByZero | mult_overflow | invalid1 | invalid2)begin
+Error_Flag = 1 ;
 NextState = Error;
 end
 else begin
 //$display("Temp ", Temp);
 if (adder_out1[12] == 1'b_1) begin
-  $display("error in neg");
+  //$display("error in neg");
   NextState = Error;
   in11 = RAM_Data_RD_B[15:0];
   in21 = RAM_Data_RD_A[15:0];
 end
 else begin
-  $display("error in pos");
+  //$display("error in pos");
   sub1 = 0;
   Temp[16:0] = adder_out1;
   htemp = Temp;
@@ -621,6 +602,9 @@ else begin
 //Errortemp = Errortemp + htemp ;  add Errortemp , htemp
 in12 = Errortemp[15:0];
 in22 = htemp[15:0];
+if (invalid1 | invalid2)
+NextState = Error;
+else
 NextState = helper;
 end
 end
