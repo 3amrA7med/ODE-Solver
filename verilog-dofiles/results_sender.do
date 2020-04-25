@@ -32,8 +32,7 @@ proc print_results {} {
     puts $output
 }
 
-set _64data 1
-## [examine -binary sim:/ODE_Solver_Chip/IO/RS/_64data]; list
+set _64data [examine -binary sim:/ODE_Solver_Chip/IO/RS/_64data]; list
 set num_of_X [examine -binary sim:/ODE_Solver_Chip/IO/RS/num_of_X]; list
 set num_of_T [examine -binary sim:/ODE_Solver_Chip/IO/RS/num_of_T]; list
 
@@ -81,8 +80,7 @@ set loop_index 0; list
 ## Loop until reading results is done, a!= 100 is a timeout in case in any failure
 while { $Done_Sending !=1 && $loop_index!=100 } {
 	## read 64 bit data, 1 => 64, 0 =>32 ##
-	set _64data 1
-	##[examine -binary sim:/ODE_Solver_Chip/IO/RS/_64data]; list
+	set _64data [examine -binary sim:/ODE_Solver_Chip/IO/RS/_64data]; list
 
 	## IF the data coming from cpu is 32 bits and we are in the first clock cycle, then skip a clock cycle ##
 	if {$_64data  == 0 && $loop_index == 1} {
