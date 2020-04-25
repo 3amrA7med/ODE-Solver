@@ -1,0 +1,30 @@
+Report End Points: 
+-----+-------+------+-------+-----+-----+-----+-----+-----------+---------
+     |Group  |Launch|Capture|Shift|Delay|Depth|Slack|Begin Point|End Point
+-----+-------+------+-------+-----+-----+-----+-----+-----------+---------
+1    |default|      |       |     |     |     |     |           |         
+-----+-------+------+-------+-----+-----+-----+-----+-----------+---------
+Report End Points: 
+-----+-----+--------------+-------+------+-----+-----+-----+-------------+-----------------------------
+     |Group|Launch        |Capture|Shift |Delay|Depth|Slack|Begin Point  |End Point                    
+-----+-----+--------------+-------+------+-----+-----+-----+-------------+-----------------------------
+1    |I2R  |rtDefaultClock|sysclk |1500.0|243.7|    4|468.8|address_WR[7]|clk_gate_Memory_reg[15]_reg/E
+2    |I2R  |rtDefaultClock|sysclk |1500.0|243.7|    4|468.8|address_WR[7]|clk_gate_Memory_reg[12]_reg/E
+3    |I2R  |rtDefaultClock|sysclk |1500.0|243.5|    4|469.0|address_WR[7]|clk_gate_Memory_reg[7]_reg/E 
+-----+-----+--------------+-------+------+-----+-----+-----+-------------+-----------------------------
+Report End Points: 
+-----+-----+--------------+-------+------+-----+-----+-----+--------------+------------
+     |Group|Launch        |Capture|Shift |Delay|Depth|Slack|Begin Point   |End Point   
+-----+-----+--------------+-------+------+-----+-----+-----+--------------+------------
+1    |I2O  |rtDefaultClock|vsysclk|1500.0|265.6|    9| 84.4|address_RD1[4]|dataOut1[62]
+2    |I2O  |rtDefaultClock|vsysclk|1500.0|265.6|    9| 84.4|address_RD1[4]|dataOut1[61]
+3    |I2O  |rtDefaultClock|vsysclk|1500.0|265.5|    9| 84.5|address_RD1[4]|dataOut1[58]
+-----+-----+--------------+-------+------+-----+-----+-----+--------------+------------
+Report End Points: 
+-----+-----+------+-------+------+-----+-----+-----+-------------------+------------
+     |Group|Launch|Capture|Shift |Delay|Depth|Slack|Begin Point        |End Point   
+-----+-----+------+-------+------+-----+-----+-----+-------------------+------------
+1    |R2O  |sysclk|vsysclk|1500.0|120.4|    4|839.3|Memory_reg[2][62]/Q|dataOut1[62]
+2    |R2O  |sysclk|vsysclk|1500.0|120.4|    4|839.3|Memory_reg[2][61]/Q|dataOut1[61]
+3    |R2O  |sysclk|vsysclk|1500.0|120.2|    4|839.5|Memory_reg[2][58]/Q|dataOut1[58]
+-----+-----+------+-------+------+-----+-----+-----+-------------------+------------
