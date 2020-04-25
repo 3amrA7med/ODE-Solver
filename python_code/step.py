@@ -26,6 +26,7 @@ X1 = [ ]
 X0Decimal = [ ]
 X1Decimal = [ ]
 Hnew = 0
+invalid = 0
 
 for i in range(N):
     num = random.random() + random.randint(0, 10)  # random decimal number between 0 and 10.99
@@ -56,13 +57,16 @@ for i in range(N):
 
 error = "0000000000000000"
 for i in range(N):
-    diff = adder(X0[ i ], X1[ i ], 1, 0)  # Diff using subtract module
+    diff, v = adder(X0[ i ], X1[ i ], 1, 0)  # Diff using subtract module
+    invalid = invalid or v
     sf_diff = diff >> 13  # store scale factor of diff to convert it from dec to binary
     diff = bin(diff).split('b')[ 1 ]  # Diff in fixed point as binary
     diff = bin2dec(diff)  # get decimal value of difference
     diff = np.abs(diff)  # get absolute value
     diff = dec2bin(str(diff), sf_diff)  # change to binary string again
-    error = bin(adder(error, diff, 0, 0)).split('b')[ 1 ]
+    r, v = adder(error, diff, 0, 0)
+    invalid = invalid or v
+    error = bin(r).split('b')[ 1 ]
 
 print("Error in binary = ", error)
 print("Error in decimal = ", bin2dec(error))
@@ -72,22 +76,34 @@ if bin2dec(error) > L:
     # print("0.9 = ", const)
     # print("0.9 = ", bin2dec(const))
 
-    Hnew = bin(multiplier(const, dec2bin(str(L), 0))).split('b')[ 1 ]
+    r, v = multiplier(const, dec2bin(str(L), 0))
+    Hnew = bin(r).split('b')[ 1 ]
+    invalid = invalid or v
     # print(Hnew)
     # print(bin2dec(Hnew))
 
-    Hnew = bin(multiplier(Hnew, Hinit)).split('b')[ 1 ]
+    r, v = multiplier(Hnew, Hinit)
+    Hnew = bin(r).split('b')[ 1 ]
+    invalid = invalid or v
     # print("h square = ", Hnew)
     # print("h square = ", bin2dec(Hnew))
 
-    Hnew = bin(multiplier(Hnew, Hinit)).split('b')[ 1 ]
+    r, v = multiplier(Hnew, Hinit)
+    Hnew = bin(r).split('b')[ 1 ]
+    invalid = invalid or v
     # print(Hnew)
     # print(bin2dec(Hnew))
 
-    Hnew = bin(division(0, Hnew, error)).split('b')[ 1 ]
+    v, r, z = division(0, Hnew, error)
+    Hnew = bin(r).split('b')[ 1 ]
+    invalid = invalid or v or z
     Hnew = '0' + Hnew
-    print("Hnew in binary  = ", Hnew)
-    print("Hnew in decimal = ", bin2dec(Hnew))
+
+    if invalid:
+        print("Overflow or division by zero occured")
+    else:
+        print("Hnew in binary  = ", Hnew)
+        print("Hnew in decimal = ", bin2dec(Hnew))
 
     # Hnew = (0.9 * pow(Hinit, 2) * L) / error
 else:
