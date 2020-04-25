@@ -1,0 +1,30 @@
+Report End Points: 
+-----+-------+------+-------+------+------+-----+-----+----------------------+-----------------------
+     |Group  |Launch|Capture|Shift |Delay |Depth|Slack|Begin Point           |End Point              
+-----+-------+------+-------+------+------+-----+-----+----------------------+-----------------------
+1    |default|sysclk|sysclk |2600.0|2369.2|   84| 37.4|DR/PacketSize_reg[3]/Q|DR/RAM_Address_reg[8]/D
+2    |default|sysclk|sysclk |2600.0|2369.2|   84| 37.4|DR/PacketSize_reg[3]/Q|DR/RAM_Address_reg[7]/D
+3    |default|sysclk|sysclk |2600.0|2369.2|   84| 37.4|DR/PacketSize_reg[3]/Q|DR/RAM_Address_reg[3]/D
+-----+-------+------+-------+------+------+-----+-----+----------------------+-----------------------
+Report End Points: 
+-----+-----+--------------+-------+------+------+-----+-----+-----------+-----------------------
+     |Group|Launch        |Capture|Shift |Delay |Depth|Slack|Begin Point|End Point              
+-----+-----+--------------+-------+------+------+-----+-----+-----------+-----------------------
+1    |I2R  |rtDefaultClock|sysclk |2600.0|1850.2|   69| 18.9|CPU_Bus[24]|DR/RAM_Address_reg[8]/D
+2    |I2R  |rtDefaultClock|sysclk |2600.0|1850.2|   69| 18.9|CPU_Bus[24]|DR/RAM_Address_reg[7]/D
+3    |I2R  |rtDefaultClock|sysclk |2600.0|1850.2|   69| 18.9|CPU_Bus[24]|DR/RAM_Address_reg[3]/D
+-----+-----+--------------+-------+------+------+-----+-----+-----------+-----------------------
+Report End Points: 
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+     |Group|Launch|Capture|Shift|Delay|Depth|Slack|Begin Point|End Point
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+1    |I2O  |      |       |     |     |     |     |           |         
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+Report End Points: 
+-----+-----+------+-------+------+-----+-----+------+-------------------+----------
+     |Group|Launch|Capture|Shift |Delay|Depth|Slack |Begin Point        |End Point 
+-----+-----+------+-------+------+-----+-----+------+-------------------+----------
+1    |R2O  |sysclk|vsysclk|2600.0| 17.7|    0|1599.7|RS/CPU_Bus_reg[3]/Q|CPU_Bus[3]
+2    |R2O  |sysclk|vsysclk|2600.0| 17.7|    0|1599.7|RS/CPU_Bus_reg[1]/Q|CPU_Bus[1]
+3    |R2O  |sysclk|vsysclk|2600.0| 17.6|    0|1599.8|RS/CPU_Bus_reg[0]/Q|CPU_Bus[0]
+-----+-----+------+-------+------+-----+-----+------+-------------------+----------
