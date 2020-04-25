@@ -1,3 +1,5 @@
+vsim work.ODE_Solver_Chip;
+
 ## Define Random Json function that will generate JSON file with Random Data ##
 proc Random_JSON {} {
     set output [exec python Random_JSON.py]
@@ -9,6 +11,25 @@ proc Encode_Data {} {
     set output [exec python Encoder.py]
     puts $output
 }
+
+## Call python Scripts to Generate Random JSON file and Encode it to Packets
+Random_JSON
+Encode_Data
+
+## Read The Packets File To Send Them to the I/O Module on the Chip 
+set packets_file [open Packets.txt]; list
+set packets_input [read $packets_file]; list
+set packets_lines [split $packets_input "\n"]; list
+set packets_Iterator 0; list
+
+## Read The Original Elements File To Compare Them with the Decoded Data from the I/O Module 
+set original_data_file [open OriginalElements.txt]; list
+set original_data_input [read $original_data_file]; list
+set original_data_lines [split $original_data_input "\n"]; list
+set original_data_Iterator 0; list
+
+## Variable To Calculate Number of False Decoded Data 
+set Fasle_Values 0 ; list
 
 ## Add the Waves for Simulation
 delete wave *
@@ -29,24 +50,6 @@ run 100
 force -deposit /INT 0
 force -deposit /Load_Process 0
 
-## Call python Scripts to Generate Random JSON file and Encode it to Packets
-Random_JSON
-Encode_Data
-
-## Read The Packets File To Send Them to the I/O Module on the Chip 
-set packets_file [open Packets.txt]; list
-set packets_input [read $packets_file]; list
-set packets_lines [split $packets_input "\n"]; list
-set packets_Iterator 0; list
-
-## Read The Original Elements File To Compare Them with the Decoded Data from the I/O Module 
-set original_data_file [open OriginalElements.txt]; list
-set original_data_input [read $original_data_file]; list
-set original_data_lines [split $original_data_input "\n"]; list
-set original_data_Iterator 0; list
-
-## Variable To Calculate Number of False Decoded Data 
-set Fasle_Values 0 ; list
 
 ## Read The [Done Loading] Signal From The Chip to Indicate the Loading Process is Done  
 set Done_Loading [examine -binary sim:/ODE_Solver_Chip/Done_Loading]; list

@@ -38,7 +38,7 @@ def cli(module, first_operand, second_operand, number, accuracy, sub, cin):
 
 # Function print output in binary and fixed point representation
 def print_output(output):
-    print("Output in binary :", bin(output).split('b')[1])
+    print("Output in binary :", bin(output).split('b')[1].zfill(16))
     sf_out = output >> 13
     num = np.uint16(output & 0x1FFF)
 
