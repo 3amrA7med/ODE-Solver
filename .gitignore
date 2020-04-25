@@ -4,12 +4,13 @@ verilog-code/transcript
 verilog-dofiles/correct_output.txt
 IO Module/work
 IO Module/transcript
+post-synthesis-results-sender/work
+post-synthesis-results-sender/transcript
 Euler/*/work
 Euler/*/transcript
-python-code/binary.txt
+binary.txt
 results.txt
 python-code/venv/
-post-synthesis-results-sender/
 
 # Verilog extensions
 *.wlf

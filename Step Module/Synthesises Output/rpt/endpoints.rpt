@@ -1,0 +1,30 @@
+Report End Points: 
+-----+-------+------+-------+------+------+-----+-----+--------------+------------------------
+     |Group  |Launch|Capture|Shift |Delay |Depth|Slack|Begin Point   |End Point               
+-----+-------+------+-------+------+------+-----+-----+--------------+------------------------
+1    |default|sysclk|sysclk |1500.0|1251.6|   40| 47.3|in21_reg[13]/Q|sub1_reg/D              
+2    |default|sysclk|sysclk |1500.0|1190.3|   39| 61.6|in21_reg[13]/Q|clk_gate_htemp_reg__47/E
+3    |default|sysclk|sysclk |1500.0|1190.3|   39| 61.6|in21_reg[13]/Q|clk_gate_in22_reg/E     
+-----+-------+------+-------+------+------+-----+-----+--------------+------------------------
+Report End Points: 
+-----+-----+--------------+-------+------+-----+-----+-----+----------------+---------------------
+     |Group|Launch        |Capture|Shift |Delay|Depth|Slack|Begin Point     |End Point            
+-----+-----+--------------+-------+------+-----+-----+-----+----------------+---------------------
+1    |I2R  |rtDefaultClock|sysclk |1500.0|573.9|   17|187.8|RAM_Data_RD_A[0]|RAM_Data_WR_reg[0]/D 
+2    |I2R  |rtDefaultClock|sysclk |1500.0|567.1|   22|193.7|RAM_Data_RD_A[0]|reset_reg/D          
+3    |I2R  |rtDefaultClock|sysclk |1500.0|567.4|   19|194.3|RAM_Data_RD_A[0]|RAM_Data_WR_reg[13]/D
+-----+-----+--------------+-------+------+-----+-----+-----+----------------+---------------------
+Report End Points: 
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+     |Group|Launch|Capture|Shift|Delay|Depth|Slack|Begin Point|End Point
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+1    |I2O  |      |       |     |     |     |     |           |         
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+Report End Points: 
+-----+-----+------+-------+-----+-----+-----+-----+--------------------------+--------------------
+     |Group|Launch|Capture|Shift|Delay|Depth|Slack|Begin Point               |End Point           
+-----+-----+------+-------+-----+-----+-----+-----+--------------------------+--------------------
+1    |R2O  |sysclk|vsysclk|500.0|  3.1|    0| 62.6|RAM_Address_RD_A_reg[12]/Q|RAM_Address_RD_A[12]
+2    |R2O  |sysclk|vsysclk|500.0|  3.0|    0| 62.8|RAM_Address_RD_A_reg[10]/Q|RAM_Address_RD_A[10]
+3    |R2O  |sysclk|vsysclk|500.0|  3.0|    0| 62.9|RAM_Address_RD_A_reg[8]/Q |RAM_Address_RD_A[8] 
+-----+-----+------+-------+-----+-----+-----+-----+--------------------------+--------------------

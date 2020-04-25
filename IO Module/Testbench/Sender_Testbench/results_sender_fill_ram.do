@@ -3,7 +3,6 @@ add wave sim:/ODE_Solver_Chip/Memory/*
 add wave sim:/ODE_Solver_Chip/IO/RS/*
 force -freeze sim:/ODE_Solver_Chip/Memory/CLK 1 0, 0 {50 ps} -r 100
 force -freeze sim:/ODE_Solver_Chip/RST 1 0
-force -freeze sim:/ODE_Solver_Chip/IO/RS/Sending_Enable 0
 run
 force -freeze sim:/ODE_Solver_Chip/RST 0
 run  

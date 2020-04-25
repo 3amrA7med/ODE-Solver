@@ -22,6 +22,7 @@ add wave -position end  sim:/Coordinator_Module/Step/Step_Memory_WR_Enable
 add wave -position end  sim:/Coordinator_Module/Step/RAM_Address_WR
 add wave -position end  sim:/Coordinator_Module/Step/RAM_Data_WR
 add wave -position 16  sim:/Coordinator_Module/Step/hnew
+add wave -position 16  sim:/Coordinator_Module/Step/htemp
 add wave -position end  sim:/Coordinator_Module/Step/Euler_Enable
 add wave -position end  sim:/Coordinator_Module/Step/Euler_End
 add wave -position end  sim:/Coordinator_Module/Step/X_process_ADD
@@ -104,24 +105,8 @@ run 200 ps
 run 1 ns
 run 3 ns
 
-break
-# at Compare stage in case not to cacluate new h uncomment next line
+
+# at Compare stage in case not to calculate new h uncomment next line
 #force -freeze sim:/Coordinator_Module/Step/Errortemp 000000000000000000000000000000000000000000000000000000000000010 0
-run 600 ps
+run 1 ns
 
-
-# for second run
-#force -freeze sim:/Coordinator_Module/Step/Euler_End 1 0
-#run 100ps
-#force -freeze sim:/Coordinator_Module/Step/Euler_End 0 0
-#run 200 ps
-#run 1 ns
-#force -freeze sim:/Coordinator_Module/Step/Euler_End 1 0
-#run 100 ps
-#force -freeze sim:/Coordinator_Module/Step/Euler_End 0 0
-#run 200 ps
-#force -freeze sim:/Coordinator_Module/Step/Euler_End 1 0
-#run 100ps
-#force -freeze sim:/Coordinator_Module/Step/Euler_End 0 0
-#run 200 ps
-# at read2 stage 8
