@@ -51,9 +51,6 @@ module Decoder_Receiver #(parameter ADDRESS_WIDTH = 13,
 	if(Loading_Enable == 1) begin
 	     Real_Loading_Enable = 1;
 	end
-	else begin
-	     Real_Loading_Enable = 0;
-	end
     end
 
     integer i = 0;
