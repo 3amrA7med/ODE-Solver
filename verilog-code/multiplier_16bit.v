@@ -73,5 +73,7 @@ module multiplier_16bit(first_operand, second_operand, out,enable,overflow);
 		assign overflow = ((temp_result[31:12] == 20'h0) || (temp_result[31:12] == 20'hFFFFF))? 1'b0 : 1'b1;
 
 	end
+	else 
+		assign out = out;
 	end
 endmodule
