@@ -5,6 +5,7 @@ force -freeze sim:/ODE_Solver_Chip/Memory/CLK 1 0, 0 {50 ps} -r 100
 force -freeze sim:/ODE_Solver_Chip/RST 1 0
 run 100
 force -freeze sim:/ODE_Solver_Chip/RST 0
+force -freeze sim:/ODE_Solver_Chip/IO/RS/Sending_Enable St0 0
 run 100
 force -freeze sim:/ODE_Solver_Chip/Memory/WR_Enable 1 0
 force -freeze sim:/ODE_Solver_Chip/Memory/address_WR 0000000000001 0

@@ -18,7 +18,7 @@ puts "Start sending the results"
 run 200
 
 ## in this file we will write the data coming from the bus ##
-set file [open "../python-code/binary.txt" w+]; list
+set file [open "../binary.txt" w+]; list
 
 ## in this file we will read the correct data to compare it with the data coming from cpu bus ##
 set output_file [open "../verilog-dofiles/correct_output.txt" r]; list
@@ -28,12 +28,11 @@ set output_Iterator 0; list
 
 ## Define print results function that will take the binary txt file and produce a readable file ##
 proc print_results {} {
-    set output [exec python ../python-code/print_results.py]
+    set output [exec python ../print_results.py]
     puts $output
 }
 
-set _64data 1
-## [examine -binary sim:/ODE_Solver_Chip/IO/RS/_64data]; list
+set _64data 1; list
 set num_of_X [examine -binary sim:/ODE_Solver_Chip/IO/RS/num_of_X]; list
 set num_of_T [examine -binary sim:/ODE_Solver_Chip/IO/RS/num_of_T]; list
 
@@ -79,7 +78,7 @@ set Done_Sending [examine -binary sim:/ODE_Solver_Chip/IO/RS/Done_Sending]; list
 set loop_index 0; list
 
 ## Loop until reading results is done, a!= 100 is a timeout in case in any failure
-while { $Done_Sending !=1 && $loop_index!=100 } {
+while { $Done_Sending !=1 && $loop_index!=30} {
 	## read 64 bit data, 1 => 64, 0 =>32 ##
 	set _64data 1
 	##[examine -binary sim:/ODE_Solver_Chip/IO/RS/_64data]; list

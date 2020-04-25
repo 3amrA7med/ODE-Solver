@@ -18,7 +18,7 @@ puts "Start sending the results"
 run 200
 
 ## in this file we will write the data coming from the bus ##
-set file [open "../python-code/binary.txt" w+]; list
+set file [open "../binary.txt" w+]; list
 
 ## in this file we will read the correct data to compare it with the data coming from cpu bus ##
 set output_file [open "../verilog-dofiles/correct_output.txt" r]; list
@@ -28,7 +28,7 @@ set output_Iterator 0; list
 
 ## Define print results function that will take the binary txt file and produce a readable file ##
 proc print_results {} {
-    set output [exec python ../python-code/print_results.py]
+    set output [exec python ../print_results.py]
     puts $output
 }
 
