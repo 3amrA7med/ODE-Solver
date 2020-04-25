@@ -164,7 +164,7 @@ def division(reset, dividend, divisor):
     res = np.uint16(res) | 0x6000
     #     print ("final result = "+str(bin(np.uint16(res))))
     ready = 1
-    return np.uint16(res)
+    return overFlow, np.uint16(res), divideByZero
 
 
 def multiplier(first_operand, second_operand):
@@ -202,7 +202,7 @@ def multiplier(first_operand, second_operand):
         overflow = True
     output_number = np.uint16(output_number)
     output = np.uint16((output_number & 0x1FFF) | output_scale_factor << 13)  # Shift number left 3 bits then OR with scale factor
-    return output
+    return output, overflow
 
 def adder(first_operand, second_operand, sub, cin):
     input_1 = np.uint16(int(first_operand, base=2))
@@ -286,7 +286,7 @@ def adder(first_operand, second_operand, sub, cin):
     # scale factor of output
     output = np.uint16(output | (SF_out << 13))
 
-    return output
+    return output,  invalid
 
 
 def binaryToDecimal(binary):
