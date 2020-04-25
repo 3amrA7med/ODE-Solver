@@ -1,3 +1,15 @@
+## Get All Verilog Files
+set files [glob -directory "./" -- "*.v"]; list
+
+## Add All Files to the Project
+foreach VERILOG_FILE $files {
+	project addfile $VERILOG_FILE
+}
+
+## Compile all Files
+project compileall
+
+## Run Simulation
 vsim work.ODE_Solver_Chip;
 
 ## Define Random Json function that will generate JSON file with Random Data ##
