@@ -13,13 +13,12 @@ N = random.randint(1, 50)  # size of vector from 1 to 50
 
 print("N = ", N)
 
-Hinit = random.random() + random.randint(0, 2)  # initial step from 0 to 2
+Hinit = random.random() + random.randint(0, 5)  # initial step from 0 to 2
 # Hinit = 2.0
-print(Hinit)
 Hinit = dec2bin(str(Hinit), 4)  # approximate to match fixed point representation
 print("Initial h = ", bin2dec(Hinit))
 
-L = 3.0 # tolerance
+L = 2.0 # tolerance
 print("Tolerance = ", L)
 
 X0 = [ ]
@@ -29,13 +28,13 @@ X1Decimal = [ ]
 Hnew = 0
 
 for i in range(N):
-    num = random.random() + random.randint(0, 60)  # random decimal number between 0 and 60.99
-    sf = random.randint(0, 5)  # random scale factor
+    num = random.random() + random.randint(0, 10)  # random decimal number between 0 and 10.99
+    sf = random.randint(0, 3)  # random scale factor
     strBinNum = dec2bin(str(num), sf)  # 16 bit binary string
     X0.append(strBinNum)
 
-    num = random.random() + random.randint(0, 60)  # random decimal number between 0 and 60.99
-    sf = random.randint(0, 5)  # random scale factor
+    num = random.random() + random.randint(0, 10)  # random decimal number between 0 and 10.99
+    sf = random.randint(0, 3)  # random scale factor
     strBinNum = dec2bin(str(num), sf)  # 16 bit binary string
     X1.append(strBinNum)
 
@@ -86,8 +85,8 @@ if bin2dec(error) > L:
     # print(bin2dec(Hnew))
 
     Hnew = bin(division(0, Hnew, error)).split('b')[ 1 ]
-
-    print("Hnew in binary = ", Hnew)
+    Hnew = '0' + Hnew
+    print("Hnew in binary  = ", Hnew)
     print("Hnew in decimal = ", bin2dec(Hnew))
 
     # Hnew = (0.9 * pow(Hinit, 2) * L) / error

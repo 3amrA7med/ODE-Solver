@@ -371,16 +371,20 @@ def create_testBench(X0, X1, N, Hnew, L, Hinit, error):
     print('run 500 ps } \n', file=File)
     print('run 100 ps \n', file=File)
     print('run 3 ns \n', file=File)
-    print('#set val [examine /Coordinator_Module/Step/Errortemp ] \n', file=File)
-    print('#if {$val != $Error} { \n', file=File)
-    print('#} \n', file=File)
+    print('set val [examine /Coordinator_Module/Error_Flag ] \n', file=File)
+    print('if {$val == 1} { \n', file=File)
+    print('error "Test0: Error in Chip Error_Flag = 1 } \n', file=File)
     print('set val [examine /Coordinator_Module/Memory/Memory(4) ] \n', file=File)
     print('if {$val != $hnew} { \n', file=File)
-    print('error "Test2: Failed, h_temp != $hnew } \n', file=File)
+    print('error "Test1: Failed, h_temp != $hnew } \n', file=File)
     print('set val [examine /Coordinator_Module/Memory/Memory(5) ] \n', file=File)
     print('if {$val != $hnew} { \n', file=File)
-    print('error "Test3: Failed, h_init != $hnew } \n', file=File)
+    print('error "Test2: Failed, h_init != $hnew } \n', file=File)
     print('puts "All tests Passed Successfully!"; \n', file=File)
 
     File.close()
+
+
+
+
 
