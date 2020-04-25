@@ -1,0 +1,25 @@
+vsim -gui work.add_sub_cla_testbench
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run

@@ -1,0 +1,25 @@
+vsim -gui work.add_sub_cs_testbench
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run
+
+run

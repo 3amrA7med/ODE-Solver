@@ -1,0 +1,69 @@
+# Reading C:/intelFPGA_pro/19.3/modelsim_ase/tcl/vsim/pref.tcl
+# OpenFile D:/ODE-Solver/verilog-code/CarrySelect/add_sub_cs.v
+project open C:/Modeltech_pe_edu_10.4a/examples/ODE
+# Loading project ODE
+# Load canceled
+# Compile of adder.v was successful.
+# Compile of adder_testbench.v was successful.
+# 2 compiles, 9 failed with no errors.
+project open C:/Modeltech_pe_edu_10.4a/examples/ODE/ODEsolver
+# reading C:/intelFPGA_pro/19.3/modelsim_ase/win32aloem/../modelsim.ini
+# Loading project ODEsolver
+# Load canceled
+# reading C:/intelFPGA_pro/19.3/modelsim_ase/win32aloem/../modelsim.ini
+# file mkdir ODEpre
+# Loading project ODEpre
+# Load canceled
+# Compile of add_sub_cla.v was successful.
+# Compile of add_sub_cs.v was successful.
+# Compile of adder.v was successful.
+# Compile of adder_testbench.v was successful.
+# Compile of carry_lookahead_adder_4bit.v was successful.
+# Compile of carry_lookahead_adder_20bit.v was successful.
+# Compile of carry_select_adder_2bit.v was successful.
+# Compile of carry_select_adder_20bit.v was successful.
+# Compile of full_adder.v was successful.
+# Compile of mux2x1.v was successful.
+# Compile of ripple_adder_2bit.v was successful.
+# 11 compiles, 0 failed with no errors.
+vsim -gui work.add_sub_cs
+# vsim -gui work.add_sub_cs 
+# Start time: 20:41:17 on Apr 25,2020
+# Loading work.add_sub_cs
+# Loading work.carry_select_adder_20bit
+# Loading work.ripple_adder_2bit
+# Loading work.full_adder
+# Loading work.carry_select_adder_2bit
+# Loading work.mux2X1
+add wave -position end sim:/add_sub_cs/*
+force -freeze sim:/add_sub_cs/in1 0000000000000010 0
+force -freeze sim:/add_sub_cs/in2 000000000000011 0
+force -freeze sim:/add_sub_cs/in2 0000000000000011 0
+force -freeze sim:/add_sub_cs/sub 0 0
+force -freeze sim:/add_sub_cs/cin 0 0
+run
+force -freeze sim:/add_sub_cs/cin 1 0
+run
+force -freeze sim:/add_sub_cs/in1 0000000000000110 0
+force -freeze sim:/add_sub_cs/cin 0 0
+force -freeze sim:/add_sub_cs/sub 1 0
+run
+force -freeze sim:/add_sub_cs/in1 0010000000000111 0
+force -freeze sim:/add_sub_cs/in2 0100000000000011 0
+force -freeze sim:/add_sub_cs/sub 0 0
+run
+force -freeze sim:/add_sub_cs/in1 1000010010001101 0
+force -freeze sim:/add_sub_cs/in2 0110000101001010 0
+run
+force -freeze sim:/add_sub_cs/sub 1 0
+run
+force -freeze sim:/add_sub_cs/in2 1110000101001010 0
+force -freeze sim:/add_sub_cs/sub 0 0
+run
+force -freeze sim:/add_sub_cs/in2 0111110001001010 0
+force -freeze sim:/add_sub_cs/in1 1000010010010101 0
+run
+force -freeze sim:/add_sub_cs/sub 1 0
+run
+force -freeze sim:/add_sub_cs/in1 1011110010010111 0
+run
