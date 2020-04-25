@@ -1,0 +1,30 @@
+Report End Points: 
+-----+-------+------+-------+------+-----+-----+-----+-----------+-----------
+     |Group  |Launch|Capture|Shift |Delay|Depth|Slack|Begin Point|End Point  
+-----+-------+------+-------+------+-----+-----+-----+-----------+-----------
+1    |default|sysclk|sysclk |1500.0|795.8|   25|517.5|A_reg[17]/Q|A_reg[0]/D 
+2    |default|sysclk|sysclk |1500.0|757.5|   25|549.8|A_reg[17]/Q|A_reg[31]/D
+3    |default|sysclk|sysclk |1500.0|731.6|   21|576.9|A_reg[17]/Q|A_reg[29]/D
+-----+-------+------+-------+------+-----+-----+-----+-----------+-----------
+Report End Points: 
+-----+-----+--------------+-------+------+-----+-----+-----+-----------+---------------------------------------
+     |Group|Launch        |Capture|Shift |Delay|Depth|Slack|Begin Point|End Point                              
+-----+-----+--------------+-------+------+-----+-----+-----+-----------+---------------------------------------
+1    |I2R  |rtDefaultClock|sysclk |1500.0|659.9|   25|102.1|divisor[13]|negated_second_operand_number_reg[8]/D 
+2    |I2R  |rtDefaultClock|sysclk |1500.0|661.8|   23|106.9|divisor[13]|number_of_bits_in_dividend_reg[4]/D    
+3    |I2R  |rtDefaultClock|sysclk |1500.0|654.5|   24|107.5|divisor[13]|negated_second_operand_number_reg[12]/D
+-----+-----+--------------+-------+------+-----+-----+-----+-----------+---------------------------------------
+Report End Points: 
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+     |Group|Launch|Capture|Shift|Delay|Depth|Slack|Begin Point|End Point
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+1    |I2O  |      |       |     |     |     |     |           |         
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+Report End Points: 
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+     |Group|Launch|Capture|Shift|Delay|Depth|Slack|Begin Point|End Point
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------
+1    |R2O  |sysclk|vsysclk|500.0|  0.9|    0| 54.8|ready_reg/Q|ready    
+2    |R2O  |sysclk|vsysclk|500.0|  1.0|    0| 54.9|Q_reg[14]/Q|Q[13]    
+3    |R2O  |sysclk|vsysclk|500.0|  0.9|    0| 55.0|Q_reg[14]/Q|Q[14]    
+-----+-----+------+-------+-----+-----+-----+-----+-----------+---------

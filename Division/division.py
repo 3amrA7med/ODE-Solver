@@ -88,4 +88,4 @@ def division(reset, dividend, divisor):
     return overFlow,np.uint16(res),divideByZero,ready
 
  
-division(1,"1110010101100100","0000000000000100")
+division(1,sys.argv[1],sys.argv[2])
