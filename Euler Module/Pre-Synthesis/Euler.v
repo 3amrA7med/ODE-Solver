@@ -3,7 +3,6 @@ module Euler
                 DATA_WIDTH=64,
                 CUR_DATA_WIDTH=16)
     (input INT,
-    //  input PROCESS,  // 0 => INIT, 1=> Start Computation
      input CLK,
      input RST,
      output reg DONE,
@@ -12,8 +11,7 @@ module Euler
      input  [DATA_WIDTH-1:0] RAM_DATA_RD1,RAM_DATA_RD2,
      output reg [ADDRESS_WIDTH-1:0] RAM_ADD_RD1,RAM_ADD_RD2,RAM_ADD_WR,
      output reg [DATA_WIDTH-1:0] RAM_DATA_WR,
-     output reg RAM_ENABLE_WR/*,
-     output ERROR*/);
+     output reg RAM_ENABLE_WR);
 
 parameter   Start=3'b000,
             Prepare=3'b001,
@@ -34,7 +32,7 @@ parameter   Start=3'b000,
     reg  [1:0] counter;
     wire invalid[8:0], cout[8:0], overflow[1:0];
 
-    always@(negedge CLK/* or state or INT /*or PROCESS/* or DONE*/) begin
+    always@(negedge CLK) begin
         
         if(RST) begin
             n_ADD=13'd0;
@@ -74,7 +72,6 @@ parameter   Start=3'b000,
         end
         else begin
             
-            // if (~CLK) begin
                 state=next;
 
                 case(state)
@@ -157,7 +154,6 @@ parameter   Start=3'b000,
                         endcase
                     end
                 endcase
-            // end
 
 
             if(~INT)    begin
@@ -261,10 +257,7 @@ parameter   Start=3'b000,
 
     end
 
-    
-/**/
-//Our Arithmetic
-    
+
     multiplier_16bit MUL(RAM_DATA_RD1[CUR_DATA_WIDTH-1:0],RAM_DATA_RD2[CUR_DATA_WIDTH-1:0],Multiplication_Result,1'b1,overflow[0]);
     add_sub_cla ELEMENT_adder(1'b0,Element_Result,Multiplication_Result,1'b0,NEW_Element_Result,cout[0],invalid[0]);
     
@@ -283,32 +276,4 @@ parameter   Start=3'b000,
 
     add_sub_cla FINAL_RESULT_adder(1'b0,h_VECTOR_RESULT,Element_Result,1'b0,FINAL_RESULT,cout[8],invalid[8]);
 
-    // assign ERROR = invalid[0] | invalid[7] | invalid[8] | overflow[0] | overflow[1];
-    
-
-
-
-
-/*/
-//Built-in Arithmetic
-
-    assign Multiplication_Result[CUR_DATA_WIDTH-2:0]=RAM_DATA_RD1[15:0]*RAM_DATA_RD2[15:0];
-
-    assign NEW_Element_Result[CUR_DATA_WIDTH-1:0] = {1'b0,Element_Result[CUR_DATA_WIDTH-2:0]} + {1'b0,Multiplication_Result[CUR_DATA_WIDTH-2:0]};
-
-
-
-    assign NEW_VECTOR_ADD[CUR_DATA_WIDTH-1:0]={1'b0,VECTOR_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-    assign NEW_MATRIX_ADD[CUR_DATA_WIDTH-1:0]={1'b0,MATRIX_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-    assign NEW_VECTOR_CNT[CUR_DATA_WIDTH-1:0]={1'b0,VECTOR_CNT[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-    assign NEW_MATRIX_CNT[CUR_DATA_WIDTH-1:0]={1'b0,MATRIX_CNT[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-    assign NEW_RESULT_ADD[CUR_DATA_WIDTH-1:0]={1'b0,RESULT_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-    assign NEW_VECTOR2_ADD[CUR_DATA_WIDTH-1:0]={1'b0,VECTOR2_ADD[CUR_DATA_WIDTH-2:0]} + {{(CUR_DATA_WIDTH-1){1'b0}},{1'b1}};
-
-    assign Addition_Result[CUR_DATA_WIDTH-1:0] = {1'b0,RAM_DATA_RD1[CUR_DATA_WIDTH-2:0]} + {1'b0,RAM_DATA_RD2[CUR_DATA_WIDTH-2:0]};
-
-    assign h_VECTOR_RESULT[CUR_DATA_WIDTH-2:0]=Addition_Result[CUR_DATA_WIDTH-2:0]*h_val[CUR_DATA_WIDTH-2:0];
-
-    assign FINAL_RESULT[CUR_DATA_WIDTH-1:0]={1'b0,h_VECTOR_RESULT[CUR_DATA_WIDTH-2:0]} + {1'b0,Element_Result[CUR_DATA_WIDTH-2:0]};
-/**/
 endmodule
